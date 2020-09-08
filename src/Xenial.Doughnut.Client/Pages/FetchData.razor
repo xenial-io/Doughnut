@@ -29,7 +29,6 @@ else
             {
                 <tr>
                     <td>@forecast.Name</td>
-                    <td>@forecast.Active</td>
                 </tr>
             }
         </tbody>
@@ -39,15 +38,13 @@ else
 @code {
     private IList<Customer> Customers;
 
-    protected async override Task OnAfterRenderAsync(bool firstRender)
+    protected override async Task OnInitializedAsync()
     {
-        if (firstRender)
+        using (var UoW = xpo.CreateUnitOfWork())
         {
-            using (var UoW = xpo.CreateUnitOfWork())
-            {
-                await UoW.UpdateSchemaAsync();
-            }
+            await UoW.UpdateSchemaAsync();
         }
+        await Refresh();
     }
 
     async Task Generate()
@@ -55,8 +52,7 @@ else
         using (var UoW = xpo.CreateUnitOfWork())
         {
             var faker = new Bogus.Faker<Customer>().CustomInstantiator(c => new Customer(UoW))
-                        .RuleFor(p => p.Name, f => f.Name.FullName())
-                        .RuleFor(p => p.Active, p => p.Random.Bool());
+                        .RuleFor(p => p.Name, f => f.Name.FullName());
 
             Customers = faker.Generate(100);
             if (UoW.InTransaction)

@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xenial.Doughnut.Client", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xenial.Doughnut.Server", "src\Xenial.Doughnut.Server\Xenial.Doughnut.Server.csproj", "{00C40E76-E4C1-4391-9A06-CDBE43E30C40}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Xenial.Doughnut.Model", "src\Xenial.Doughnut.Model\Xenial.Doughnut.Model.csproj", "{74035F64-6B3B-4429-B139-002213BC314D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -46,9 +48,22 @@ Global
 		{00C40E76-E4C1-4391-9A06-CDBE43E30C40}.Release|x64.Build.0 = Release|Any CPU
 		{00C40E76-E4C1-4391-9A06-CDBE43E30C40}.Release|x86.ActiveCfg = Release|Any CPU
 		{00C40E76-E4C1-4391-9A06-CDBE43E30C40}.Release|x86.Build.0 = Release|Any CPU
+		{74035F64-6B3B-4429-B139-002213BC314D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74035F64-6B3B-4429-B139-002213BC314D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74035F64-6B3B-4429-B139-002213BC314D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{74035F64-6B3B-4429-B139-002213BC314D}.Debug|x64.Build.0 = Debug|Any CPU
+		{74035F64-6B3B-4429-B139-002213BC314D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{74035F64-6B3B-4429-B139-002213BC314D}.Debug|x86.Build.0 = Debug|Any CPU
+		{74035F64-6B3B-4429-B139-002213BC314D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74035F64-6B3B-4429-B139-002213BC314D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74035F64-6B3B-4429-B139-002213BC314D}.Release|x64.ActiveCfg = Release|Any CPU
+		{74035F64-6B3B-4429-B139-002213BC314D}.Release|x64.Build.0 = Release|Any CPU
+		{74035F64-6B3B-4429-B139-002213BC314D}.Release|x86.ActiveCfg = Release|Any CPU
+		{74035F64-6B3B-4429-B139-002213BC314D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5B220F1F-62A1-4F7D-AE48-70833C1C362F} = {82EEC61F-8D5E-48A9-9CF8-329B4F7291E3}
 		{00C40E76-E4C1-4391-9A06-CDBE43E30C40} = {82EEC61F-8D5E-48A9-9CF8-329B4F7291E3}
+		{74035F64-6B3B-4429-B139-002213BC314D} = {82EEC61F-8D5E-48A9-9CF8-329B4F7291E3}
 	EndGlobalSection
 EndGlobal

@@ -16,6 +16,7 @@ using DevExpress.Xpo.DB.Helpers;
 using BIT.Data.Functions;
 using BIT.Xpo.DataStores;
 using BIT.Data.Services;
+using Xenial.Doughnut.Model;
 
 namespace Xenial.Doughnut.Client
 {
@@ -23,10 +24,13 @@ namespace Xenial.Doughnut.Client
     {
         public static async Task Main(string[] args)
         {
+            DevExpress.Xpo.SimpleDataLayer.SuppressReentrancyAndThreadSafetyCheck = true;
+
             XpoWebApiHttpProvider.Register();
+
             var XpoWebApiAspNet = XpoWebApiHttpProvider.GetConnectionString("https://localhost:6001", "/api/XpoWebApi", string.Empty, "001");
 
-            XpoInitializer xpoInitializer = new XpoInitializer(XpoWebApiAspNet, typeof(Invoice), typeof(Customer));
+            var xpoInitializer = new XpoInitializer(XpoWebApiAspNet, ModelTypeList.ModelTypes);
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");

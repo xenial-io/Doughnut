@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 
 namespace Xenial.Doughnut.Server
 {
@@ -30,6 +31,13 @@ namespace Xenial.Doughnut.Server
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors(policy =>
+                policy.WithOrigins("http://localhost:5000", "https://localhost:5001")
+                .AllowAnyMethod()
+                .WithHeaders(HeaderNames.ContentType, HeaderNames.Authorization, "datastoreid")
+                .AllowCredentials()
+            );
 
             app.UseHttpsRedirection();
 

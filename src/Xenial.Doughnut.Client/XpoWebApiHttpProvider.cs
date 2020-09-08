@@ -1,0 +1,61 @@
+using System;
+using System.Collections.Generic;
+
+using BIT.Data.Functions;
+using BIT.Data.Services;
+using BIT.Xpo.DataStores;
+
+using DevExpress.Xpo.DB;
+using DevExpress.Xpo.DB.Helpers;
+
+namespace Xenial.Doughnut.Client
+{
+    public class XpoWebApiHttpProvider : FunctionDataStoreAsync
+    {
+        public const string TokenPart = "Token";
+        public const string DataStoreIdPart = "DataStoreId";
+        private const string UrlPart = "Url";
+        private const string ControllerPart = "Controller";
+        private const string SerializationPart = "Serialization";
+        public XpoWebApiHttpProvider(
+            IFunction functionClient,
+            IObjectSerializationService objectSerializationService,
+            AutoCreateOption autoCreateOption
+        ) : base(functionClient, objectSerializationService, autoCreateOption) { }
+
+        public static string GetConnectionString(
+            string Url,
+            string Controller,
+            string Token,
+            string DataStoreId
+        ) => $"{DataStoreBase.XpoProviderTypeParameterName}={XpoProviderTypeString};{UrlPart}={Url};{ControllerPart}={Controller};{TokenPart}={Token};{DataStoreIdPart}={DataStoreId}";
+
+        public const string XpoProviderTypeString = nameof(XpoWebApiHttpProvider);
+
+        public static IDataStore CreateProviderFromString(string connectionString, AutoCreateOption autoCreateOption, out IDisposable[] objectsToDisposeOnDisconnect)
+        {
+            objectsToDisposeOnDisconnect = null;
+            var Parser = new ConnectionStringParser(connectionString);
+            var Url = Parser.GetPartByName(UrlPart);
+            var Controller = Parser.GetPartByName(ControllerPart);
+            var Token = Parser.GetPartByName(TokenPart);
+            var DataStoreId = Parser.GetPartByName(DataStoreIdPart);
+            var Serialization = Parser.GetPartByName(SerializationPart);
+
+            var Headers = new Dictionary<string, string>();
+            Headers.Add("Authorization", "Bearer " + Token);
+            Headers.Add(DataStoreIdPart, DataStoreId);
+            var uri = new Uri(new Uri(Url), Controller);
+            var url = uri.ToString();
+
+            var restClientNetFunctionClient = new HttpClientFunction(url, Headers);
+
+            return new XpoWebApiHttpProvider(restClientNetFunctionClient, new CompressXmlObjectSerializationService(), autoCreateOption);
+        }
+
+        public static void Register()
+        {
+            DataStoreBase.RegisterDataStoreProvider(XpoProviderTypeString, CreateProviderFromString);
+        }
+    }
+}

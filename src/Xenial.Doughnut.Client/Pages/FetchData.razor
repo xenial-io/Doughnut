@@ -39,6 +39,17 @@ else
 @code {
     private IList<Customer> Customers;
 
+    protected async override Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            using (var UoW = xpo.CreateUnitOfWork())
+            {
+                await UoW.UpdateSchemaAsync();
+            }
+        }
+    }
+
     async Task Generate()
     {
         using (var UoW = xpo.CreateUnitOfWork())
@@ -49,7 +60,7 @@ else
 
             Customers = faker.Generate(100);
             if (UoW.InTransaction)
-                UoW.CommitChanges();
+                await UoW.CommitChangesAsync();
         }
     }
 
@@ -57,9 +68,7 @@ else
     {
         using (var UoW = xpo.CreateUnitOfWork())
         {
-            var CustomersFromApi = new XPCollection<Customer>(UoW);
-
-            Customers = CustomersFromApi.ToList();
+            Customers = await UoW.Query<Customer>().ToListAsync();
         }
     }
 }

@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace Xenial.Doughnut.Server.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     public class XpoWebApiController : XpoWebApiControllerBase
     {
         public XpoWebApiController(IFunction DataStoreFunctionServer) : base(DataStoreFunctionServer)

@@ -7,6 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BIT.Xpo.Providers.WebApi.Client" Version="20.1.6.583700904" />
+    <PackageReference Include="Bogus" Version="30.0.4" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0-preview.8.20414.8" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.0-preview.8.20414.8" PrivateAssets="all" />
     <PackageReference Include="System.Net.Http.Json" Version="5.0.0-preview.8.20407.11" />

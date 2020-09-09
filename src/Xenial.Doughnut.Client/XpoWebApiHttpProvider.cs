@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Net.Http;
 
 using BIT.Data.Functions;
 using BIT.Data.Services;
@@ -32,30 +33,23 @@ namespace Xenial.Doughnut.Client
 
         public const string XpoProviderTypeString = nameof(XpoWebApiHttpProvider);
 
-        public static IDataStore CreateProviderFromString(string connectionString, AutoCreateOption autoCreateOption, out IDisposable[] objectsToDisposeOnDisconnect)
+        public static IDataStore CreateProviderFromString(HttpClient client, string connectionString, AutoCreateOption autoCreateOption, out IDisposable[] objectsToDisposeOnDisconnect)
         {
             objectsToDisposeOnDisconnect = null;
             var Parser = new ConnectionStringParser(connectionString);
             var Url = Parser.GetPartByName(UrlPart);
             var Controller = Parser.GetPartByName(ControllerPart);
-            var Token = Parser.GetPartByName(TokenPart);
             var DataStoreId = Parser.GetPartByName(DataStoreIdPart);
-            var Serialization = Parser.GetPartByName(SerializationPart);
 
             var Headers = new Dictionary<string, string>();
-            Headers.Add("Authorization", "Bearer " + Token);
             Headers.Add(DataStoreIdPart, DataStoreId);
             var uri = new Uri(new Uri(Url), Controller);
             var url = uri.ToString();
 
-            var restClientNetFunctionClient = new HttpClientFunction(url, Headers);
+            var restClientNetFunctionClient = new HttpClientFunction(client, url, Headers);
 
             return new XpoWebApiHttpProvider(restClientNetFunctionClient, new CompressXmlObjectSerializationService(), autoCreateOption);
         }
 
-        public static void Register()
-        {
-            DataStoreBase.RegisterDataStoreProvider(XpoProviderTypeString, CreateProviderFromString);
-        }
     }
 }

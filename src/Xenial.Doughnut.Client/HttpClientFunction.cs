@@ -31,15 +31,6 @@ namespace Xenial.Doughnut.Client
         }
 
         /// <summary>
-        /// Initializes a new instance of the ApiFunction class with default settings.
-        /// </summary>
-        /// <param name="url">Api Url</param>
-        /// <param name="serializationAdapter">An implementation of ISerializationAdapter</param>
-        /// <param name="headers">Additional headers for the api request</param>
-        public HttpClientFunction(string url, IDictionary<string, string> headers)
-            : this(new HttpClient(), url, headers) { }
-
-        /// <summary>
         /// Executes the funtion asynchronous with the specified parameters
         /// </summary>
         /// <param name="Parameters">An implementation of IDataParameters</param>

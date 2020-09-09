@@ -18,6 +18,8 @@ using BIT.Xpo.DataStores;
 using BIT.Data.Services;
 using Xenial.Doughnut.Model;
 using System.Threading;
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
+using DevExpress.Xpo;
 
 namespace Xenial.Doughnut.Client
 {
@@ -27,17 +29,12 @@ namespace Xenial.Doughnut.Client
         {
             DevExpress.Xpo.SimpleDataLayer.SuppressReentrancyAndThreadSafetyCheck = true;
 
-            XpoWebApiHttpProvider.Register();
+          
 
-            var XpoWebApiAspNet = XpoWebApiHttpProvider.GetConnectionString("https://localhost:6001", "/api/XpoWebApi", string.Empty, "001");
-
-            var xpoInitializer = new XpoInitializer(XpoWebApiAspNet, ModelTypeList.ModelTypes);
-            
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
-            builder.Services.AddSingleton(_ => xpoInitializer);
 
             builder.Services.AddOidcAuthentication(options =>
             {
@@ -45,6 +42,43 @@ namespace Xenial.Doughnut.Client
                 // For more information, see https://aka.ms/blazor-standalone-auth
                 builder.Configuration.Bind("Local", options.ProviderOptions);
             });
+
+            builder.Services.AddHttpClient("Xenial.Doughnut.Server")
+                 .AddHttpMessageHandler(sp =>
+                 {
+                     var handler = sp.GetService<AuthorizationMessageHandler>()
+                         .ConfigureHandler(
+                             authorizedUrls: new[] { "https://localhost:7001" },
+                             scopes: new[]
+                             {
+                                 "Xenial.Doughnut.Server"
+                             });
+                     return handler;
+                 });
+
+            XpoInitializer xpoInitializer = null;
+
+            builder.Services.AddScoped(s =>
+            {
+                DataStoreBase.RegisterDataStoreProvider(XpoWebApiHttpProvider.XpoProviderTypeString, CreateProviderFromString);
+
+                IDataStore CreateProviderFromString(string connectionString, AutoCreateOption autoCreateOption, out IDisposable[] objectsToDisposeOnDisconnect)
+                {
+                    var clientFactory = s.GetService<IHttpClientFactory>();
+                    return XpoWebApiHttpProvider.CreateProviderFromString(clientFactory.CreateClient("Xenial.Doughnut.Server"), connectionString, autoCreateOption, out objectsToDisposeOnDisconnect);
+                }
+
+                if (xpoInitializer == null)
+                {
+                    var XpoWebApiAspNet = XpoWebApiHttpProvider.GetConnectionString("https://localhost:7001", "/api/XpoWebApi", string.Empty, "001");
+
+                    xpoInitializer = new XpoInitializer(XpoWebApiAspNet, ModelTypeList.ModelTypes);
+                }
+
+                return xpoInitializer.CreateUnitOfWork();
+            });
+
+            builder.Services.AddApiAuthorization();
 
             await builder.Build().RunAsync();
         }

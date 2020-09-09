@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="BIT.Xpo.Providers.WebApi.AspNetCore" Version="20.1.6.583700904" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
   </ItemGroup>
 
 </Project>

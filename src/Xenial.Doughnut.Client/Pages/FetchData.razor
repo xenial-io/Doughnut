@@ -1,7 +1,7 @@
 ﻿@page "/fetchdata"
 @attribute [Authorize]
 @inject HttpClient Http
-@inject XpoInitializer xpo
+@inject UnitOfWork uow
 
 <h1>Weather forecast</h1>
 
@@ -41,31 +41,25 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        using (var UoW = xpo.CreateUnitOfWork())
-        {
-            await UoW.UpdateSchemaAsync();
-        }
+        await uow.UpdateSchemaAsync();
+        
         await Refresh();
     }
 
     async Task Generate()
     {
-        using (var UoW = xpo.CreateUnitOfWork())
-        {
-            var faker = new Bogus.Faker<Customer>().CustomInstantiator(c => new Customer(UoW))
-                        .RuleFor(p => p.Name, f => f.Name.FullName());
+        var faker = new Bogus.Faker<Customer>().CustomInstantiator(c => new Customer(uow))
+                    .RuleFor(p => p.Name, f => f.Name.FullName());
 
-            Customers = faker.Generate(100);
-            if (UoW.InTransaction)
-                await UoW.CommitChangesAsync();
+        Customers = faker.Generate(100);
+        if (uow.InTransaction)
+        {
+            await uow.CommitChangesAsync();
         }
     }
 
     async Task Refresh()
     {
-        using (var UoW = xpo.CreateUnitOfWork())
-        {
-            Customers = await UoW.Query<Customer>().ToListAsync();
-        }
+        Customers = await uow.Query<Customer>().ToListAsync();
     }
 }

@@ -1,0 +1,23 @@
+# tye application configuration file
+# read all about it at https://github.com/dotnet/tye
+#
+# when you've given us a try, we'd love to know what you think:
+#    https://aka.ms/AA7q20u
+#
+name: xenial.doughnut
+services:
+- name: xenial-doughnut-client
+  project: src/Xenial.Doughnut.Client/Xenial.Doughnut.Client.csproj
+  bindings:
+  - protocol: https
+    port: 6001
+- name: xenial-doughnut-server
+  project: src/Xenial.Doughnut.Server/Xenial.Doughnut.Server.csproj
+  bindings:
+    - protocol: https
+      port: 7001
+- name: Identity
+  external: true
+  bindings:
+    - protocol: https
+      port: 5001

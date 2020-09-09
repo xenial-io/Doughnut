@@ -17,6 +17,7 @@ using BIT.Data.Functions;
 using BIT.Xpo.DataStores;
 using BIT.Data.Services;
 using Xenial.Doughnut.Model;
+using System.Threading;
 
 namespace Xenial.Doughnut.Client
 {
@@ -31,12 +32,19 @@ namespace Xenial.Doughnut.Client
             var XpoWebApiAspNet = XpoWebApiHttpProvider.GetConnectionString("https://localhost:6001", "/api/XpoWebApi", string.Empty, "001");
 
             var xpoInitializer = new XpoInitializer(XpoWebApiAspNet, ModelTypeList.ModelTypes);
-
+            
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
             builder.Services.AddSingleton(_ => xpoInitializer);
+
+            builder.Services.AddOidcAuthentication(options =>
+            {
+                // Configure your authentication provider options here.
+                // For more information, see https://aka.ms/blazor-standalone-auth
+                builder.Configuration.Bind("Local", options.ProviderOptions);
+            });
 
             await builder.Build().RunAsync();
         }

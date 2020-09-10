@@ -4,6 +4,7 @@
     <TargetFramework>net5.0</TargetFramework>
     <RuntimeIdentifier>browser-wasm</RuntimeIdentifier>
     <UseBlazorWebAssembly>true</UseBlazorWebAssembly>
+    <BlazorWebAssemblyEnableLinking  Condition="'$(Configuration)'!='Release'">false</BlazorWebAssemblyEnableLinking>
   </PropertyGroup>
 
   <ItemGroup>

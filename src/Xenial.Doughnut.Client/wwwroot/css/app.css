@@ -1,8 +1,4 @@
-@import url('open-iconic/font/css/open-iconic-bootstrap.min.css');
 
-* + * {
-    margin: 1em 0 0;
-}
 
 html, body {
     font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;

@@ -20,6 +20,7 @@ using Xenial.Doughnut.Model;
 using System.Threading;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using DevExpress.Xpo;
+using Skclusive.Material.Component;
 
 namespace Xenial.Doughnut.Client
 {
@@ -32,7 +33,16 @@ namespace Xenial.Doughnut.Client
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
 
-            builder.Services.AddAntDesign();
+            builder.Services.TryAddMaterialServices(new MaterialConfigBuilder().Build());
+
+            builder.Services.TryAddDashboardViewServices
+            (
+                new DashboardViewConfigBuilder()
+                .WithIsServer(false)
+                .WithIsPreRendering(false)
+                .WithResponsive(true)
+                .Build()
+            );
 
             builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(builder.HostEnvironment.BaseAddress) });
 

@@ -1,11 +1,8 @@
-﻿<DashboardResources />
+﻿@inherits LayoutComponentBase
 
-@*<MaterialScripts />
-<MaterialStyles />
+<DashboardResources />
 
-<ThemeProvider Theme="@Theme.Dark" />*@
-
-<Router AppAssembly="@typeof(Program).Assembly">
+<Router AppAssembly="@typeof(FullLayout).Assembly">
     <Found Context="routeData">
         <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(FullLayout)">
             <NotAuthorized>

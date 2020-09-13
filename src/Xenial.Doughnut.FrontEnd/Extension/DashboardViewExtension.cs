@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Skclusive.Material.Component;
 using Skclusive.Material.Layout;
 
-namespace Xenial.Doughnut.Client
+namespace Xenial.Doughnut.FrontEnd
 {
     public static class DashboardViewExtension
     {

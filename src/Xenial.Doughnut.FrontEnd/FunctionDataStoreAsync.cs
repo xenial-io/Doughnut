@@ -9,7 +9,7 @@ using BIT.Xpo.Models;
 using DevExpress.Xpo.DB;
 using DevExpress.Xpo.Helpers;
 
-namespace Xenial.Doughnut.Client
+namespace Xenial.Doughnut.FrontEnd
 {
     public abstract class FunctionDataStoreAsync : IDataStore, IDataStoreAsync, ICommandChannel
     {

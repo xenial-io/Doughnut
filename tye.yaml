@@ -6,11 +6,16 @@
 #
 name: xenial.doughnut
 services:
-- name: xenial-doughnut-client
-  project: src/Xenial.Doughnut.Client/Xenial.Doughnut.Client.csproj
+- name: xenial-doughnut-frontend-wasm
+  project: src/Xenial.Doughnut.FrontEnd.Wasm/Xenial.Doughnut.FrontEnd.Wasm.csproj
   bindings:
   - protocol: https
     port: 6001
+- name: xenial-doughnut-frontend-server
+  project: src/Xenial.Doughnut.FrontEnd.Server/Xenial.Doughnut.FrontEnd.Server.csproj
+  bindings:
+  - protocol: https
+    port: 6003
 - name: xenial-doughnut-server
   project: src/Xenial.Doughnut.Server/Xenial.Doughnut.Server.csproj
   bindings:

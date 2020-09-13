@@ -1,7 +1,7 @@
 ﻿using Skclusive.Material.Component;
 using Skclusive.Material.Layout;
 
-namespace Xenial.Doughnut.Client
+namespace Xenial.Doughnut.FrontEnd
 {
     public interface IDashboardViewConfig : ILayoutConfig
     {

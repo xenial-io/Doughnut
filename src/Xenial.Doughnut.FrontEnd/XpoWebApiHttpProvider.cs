@@ -9,7 +9,7 @@ using BIT.Xpo.DataStores;
 using DevExpress.Xpo.DB;
 using DevExpress.Xpo.DB.Helpers;
 
-namespace Xenial.Doughnut.Client
+namespace Xenial.Doughnut.FrontEnd
 {
     public class XpoWebApiHttpProvider : FunctionDataStoreAsync
     {

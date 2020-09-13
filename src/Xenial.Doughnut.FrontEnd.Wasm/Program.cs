@@ -17,12 +17,13 @@ using BIT.Data.Functions;
 using BIT.Xpo.DataStores;
 using BIT.Data.Services;
 using Xenial.Doughnut.Model;
+using Xenial.Doughnut.FrontEnd;
 using System.Threading;
 using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using DevExpress.Xpo;
 using Skclusive.Material.Component;
 
-namespace Xenial.Doughnut.Client
+namespace Xenial.Doughnut.FrontEnd
 {
     public class Program
     {
@@ -31,7 +32,7 @@ namespace Xenial.Doughnut.Client
             DevExpress.Xpo.SimpleDataLayer.SuppressReentrancyAndThreadSafetyCheck = true;
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            builder.RootComponents.Add<App>("#app");
+            builder.RootComponents.Add<Xenial.Doughnut.FrontEnd.App>("#app");
 
             builder.Services.TryAddMaterialServices(new MaterialConfigBuilder().Build());
 

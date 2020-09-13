@@ -32,7 +32,7 @@ namespace Xenial.Doughnut.FrontEnd
             DevExpress.Xpo.SimpleDataLayer.SuppressReentrancyAndThreadSafetyCheck = true;
 
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
-            builder.RootComponents.Add<Xenial.Doughnut.FrontEnd.App>("#app");
+            builder.RootComponents.Add<App>("#app");
 
             builder.Services.TryAddMaterialServices(new MaterialConfigBuilder().Build());
 

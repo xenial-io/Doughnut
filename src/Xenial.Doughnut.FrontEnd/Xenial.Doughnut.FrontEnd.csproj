@@ -21,8 +21,4 @@
     <ProjectReference Include="..\Xenial.Doughnut.Model\Xenial.Doughnut.Model.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\css\" />
-  </ItemGroup>
-
 </Project>

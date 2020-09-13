@@ -3,6 +3,13 @@
 @code {
     protected override void OnInitialized()
     {
-        Navigation.NavigateTo($"authentication/login?returnUrl={Uri.EscapeDataString(Navigation.Uri)}");
+        if (PlatformInfo.IsWebAssembly)
+        {
+            Navigation.NavigateTo($"authentication/login?returnUrl={Uri.EscapeDataString(Navigation.Uri)}");
+        }
+        else
+        {
+
+        }
     }
 }

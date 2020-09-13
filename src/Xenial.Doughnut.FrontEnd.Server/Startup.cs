@@ -2,20 +2,81 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using IdentityModel;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace Xenial.Doughnut.FrontEnd.Server
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+        public IWebHostEnvironment Environment { get; }
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
+            => (Configuration, Environment) = (configuration, environment);
+
         // This method gets called by the runtime. Use this method to add services to the container.
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<CookiePolicyOptions>(options =>
+            {
+                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+                // options.CheckConsentNeeded = context => true;
+                options.MinimumSameSitePolicy = SameSiteMode.None;
+            });
+
+            services.AddRazorPages();
+            services.AddServerSideBlazor();
+
+            services.TryAddDashboardViewServices
+            (
+                new DashboardViewConfigBuilder()
+                .WithIsServer(true)
+                .WithIsPreRendering(false)
+                .WithResponsive(true)
+                .Build()
+            );
+
+            JwtSecurityTokenHandler.DefaultMapInboundClaims = false;
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "Cookies";
+                options.DefaultChallengeScheme = "oidc";
+            })
+            .AddCookie("Cookies")
+            .AddOpenIdConnect("oidc", options =>
+            {
+                options.SignInScheme = "Cookies";
+                options.RequireHttpsMetadata = Environment.IsProduction();
+
+                options.Authority = Configuration.GetSection("Local").GetValue<string>("Authority");
+                options.ClientId = Configuration.GetSection("Local").GetValue<string>("ClientId");
+                options.ClientSecret = "abc";
+                options.ResponseType = "code";
+
+                options.GetClaimsFromUserInfoEndpoint = true;
+
+                options.Scope.Add("openid");
+                options.Scope.Add("profile");
+                options.Scope.Add("email");
+                options.Scope.Add("phone");
+                options.Scope.Add("Xenial.Doughnut.Server");
+
+                options.SaveTokens = true;
+
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -24,16 +85,28 @@ namespace Xenial.Doughnut.FrontEnd.Server
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseWebAssemblyDebugging();
             }
+            else
+            {
+                app.UseExceptionHandler("/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                app.UseHsts();
+            }
+
+            app.UseHttpsRedirection();
+            app.UseCookiePolicy();
+            app.UseStaticFiles();
+
+            app.UseAuthentication();
 
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapGet("/", async context =>
-                {
-                    await context.Response.WriteAsync("Hello World!");
-                });
+                endpoints.MapBlazorHub();
+                endpoints.MapFallbackToPage("/_Host");
+                // endpoints.MapFallbackToFile("index.html");
             });
         }
     }

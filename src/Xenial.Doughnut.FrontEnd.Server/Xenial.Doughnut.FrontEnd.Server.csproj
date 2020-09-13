@@ -10,11 +10,22 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.OpenIdConnect" Version="5.0.0-preview.8.20414.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="5.0.0-preview.8.20414.8" />
+    <PackageReference Include="IdentityModel" Version="3.10.7" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Properties\launchSettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Pages\_Host.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

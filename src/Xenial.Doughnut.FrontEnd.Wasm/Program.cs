@@ -89,7 +89,10 @@ namespace Xenial.Doughnut.FrontEnd
                 return xpoInitializer.CreateUnitOfWork();
             });
 
-            builder.Services.AddApiAuthorization();
+            builder.Services.AddApiAuthorization(options =>
+            {
+                options.AuthenticationPaths.LogOutSucceededPath = "";
+            });
 
             await builder.Build().RunAsync();
         }

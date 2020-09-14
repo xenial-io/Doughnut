@@ -22,7 +22,6 @@ namespace Xenial.Doughnut.FrontEnd
         /// <param name="headers">Additional headers for the api request</param>
         public HttpClientFunction(HttpClient client, string url, IDictionary<string, string> headers)
         {
-            
             foreach (var header in headers)
             {
                 client.DefaultRequestHeaders.Add(header.Key, header.Value);

@@ -1,27 +1,19 @@
-using System;
+﻿using System;
 using System.Net.Http;
-using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Text;
+
+using BIT.Xpo;
+
+using DevExpress.Xpo.DB;
+
+using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using BIT.Xpo.Providers.WebApi.Client;
-using BIT.Xpo;
-using DevExpress.Xpo.DB;
-using BIT.Data.Functions.RestClientNet;
-using RestClient.Net.Abstractions;
-using DevExpress.Xpo.DB.Helpers;
-using BIT.Data.Functions;
-using BIT.Xpo.DataStores;
-using BIT.Data.Services;
-using Xenial.Doughnut.Model;
-using Xenial.Doughnut.FrontEnd;
-using System.Threading;
-using Microsoft.AspNetCore.Components.WebAssembly.Authentication;
-using DevExpress.Xpo;
+
 using Skclusive.Material.Component;
+
+using Xenial.Doughnut.Model;
 
 namespace Xenial.Doughnut.FrontEnd
 {

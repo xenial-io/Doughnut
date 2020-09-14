@@ -1,13 +1,10 @@
-﻿using BIT.Data.Functions;
+﻿using System.Threading.Tasks;
+
+using BIT.Data.Functions;
 using BIT.Xpo.Providers.WebApi.AspNetCore;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace Xenial.Doughnut.Server.Controllers
 {
@@ -19,11 +16,8 @@ namespace Xenial.Doughnut.Server.Controllers
         public XpoWebApiController(IFunction DataStoreFunctionServer) : base(DataStoreFunctionServer)
         {
         }
-        
-        public async override Task<string> Get()
-        {
-            return await base.Get();
-        }
+
+        public async override Task<string> Get() => await base.Get();
 
         public async override Task<IDataResult> Post()
         {

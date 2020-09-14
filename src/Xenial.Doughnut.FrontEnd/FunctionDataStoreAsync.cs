@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,15 +13,16 @@ namespace Xenial.Doughnut.FrontEnd
 {
     public abstract class FunctionDataStoreAsync : IDataStore, IDataStoreAsync, ICommandChannel
     {
-        IFunction FunctionClient { get; set; }
-        IFunctionAsync FunctionClientAsync { get; set; }
-        IObjectSerializationService objectSerializationHelper;
+        private IFunction FunctionClient { get; set; }
+        private IFunctionAsync FunctionClientAsync { get; set; }
+
+        private readonly IObjectSerializationService objectSerializationHelper;
         public FunctionDataStoreAsync(IFunction functionClient, IObjectSerializationService objectSerializationHelper, AutoCreateOption autoCreateOption)
         {
-            this.FunctionClient = functionClient;
+            FunctionClient = functionClient;
             if (functionClient is IFunctionAsync functionAsync)
             {
-                this.FunctionClientAsync = functionAsync;
+                FunctionClientAsync = functionAsync;
             }
 
             this.objectSerializationHelper = objectSerializationHelper;
@@ -31,72 +32,80 @@ namespace Xenial.Doughnut.FrontEnd
 
         public virtual ModificationResult ModifyData(params ModificationStatement[] dmlStatements)
         {
-            IDataParameters Parameters = new DataParameters();
-            Parameters.MemberName = nameof(ModifyData);
-            Parameters.ParametersValue = this.objectSerializationHelper.ToByteArray<ModificationStatement[]>(dmlStatements);
+            IDataParameters Parameters = new DataParameters
+            {
+                MemberName = nameof(ModifyData),
+                ParametersValue = objectSerializationHelper.ToByteArray<ModificationStatement[]>(dmlStatements)
+            };
             var DataResult = FunctionClient.ExecuteFunction(Parameters);
-            var ModificationResults = this.objectSerializationHelper.GetObjectsFromByteArray<ModificationResult>(DataResult.ResultValue);
+            var ModificationResults = objectSerializationHelper.GetObjectsFromByteArray<ModificationResult>(DataResult.ResultValue);
             return ModificationResults;
         }
         public async virtual Task<ModificationResult> ModifyDataAsync(CancellationToken cancellationToken, params ModificationStatement[] dmlStatements)
         {
-            IDataParameters Parameters = new DataParameters();
-            Parameters.MemberName = nameof(ModifyData);
-            Parameters.ParametersValue = this.objectSerializationHelper.ToByteArray<ModificationStatement[]>(dmlStatements);
+            IDataParameters Parameters = new DataParameters
+            {
+                MemberName = nameof(ModifyData),
+                ParametersValue = objectSerializationHelper.ToByteArray<ModificationStatement[]>(dmlStatements)
+            };
             var DataResult = await FunctionClientAsync.ExecuteFunctionAsync(Parameters);
-            var ModificationResults = this.objectSerializationHelper.GetObjectsFromByteArray<ModificationResult>(DataResult.ResultValue);
+            var ModificationResults = objectSerializationHelper.GetObjectsFromByteArray<ModificationResult>(DataResult.ResultValue);
             return ModificationResults;
         }
 
         public virtual SelectedData SelectData(params SelectStatement[] selects)
         {
-            IDataParameters Parameters = new DataParameters();
-            Parameters.MemberName = nameof(SelectData);
-            Parameters.ParametersValue = this.objectSerializationHelper.ToByteArray<SelectStatement[]>(selects);
+            IDataParameters Parameters = new DataParameters
+            {
+                MemberName = nameof(SelectData),
+                ParametersValue = objectSerializationHelper.ToByteArray<SelectStatement[]>(selects)
+            };
             var DataResult = FunctionClient.ExecuteFunction(Parameters);
-            var SelectedData = this.objectSerializationHelper.GetObjectsFromByteArray<SelectedData>(DataResult.ResultValue);
+            var SelectedData = objectSerializationHelper.GetObjectsFromByteArray<SelectedData>(DataResult.ResultValue);
             return SelectedData;
         }
 
         public async virtual Task<SelectedData> SelectDataAsync(CancellationToken cancellationToken, params SelectStatement[] selects)
         {
-            IDataParameters Parameters = new DataParameters();
-            Parameters.MemberName = nameof(SelectData);
-            Parameters.ParametersValue = this.objectSerializationHelper.ToByteArray<SelectStatement[]>(selects);
+            IDataParameters Parameters = new DataParameters
+            {
+                MemberName = nameof(SelectData),
+                ParametersValue = objectSerializationHelper.ToByteArray<SelectStatement[]>(selects)
+            };
             var DataResult = await FunctionClientAsync.ExecuteFunctionAsync(Parameters);
-            var SelectedData = this.objectSerializationHelper.GetObjectsFromByteArray<SelectedData>(DataResult.ResultValue);
+            var SelectedData = objectSerializationHelper.GetObjectsFromByteArray<SelectedData>(DataResult.ResultValue);
             return SelectedData;
         }
 
         public virtual UpdateSchemaResult UpdateSchema(bool dontCreateIfFirstTableNotExist, params DBTable[] tables)
         {
             IDataParameters Parameters = new DataParameters();
-            UpdateSchemaParameters updateSchemaParameters = new UpdateSchemaParameters(dontCreateIfFirstTableNotExist, tables);
+            var updateSchemaParameters = new UpdateSchemaParameters(dontCreateIfFirstTableNotExist, tables);
             Parameters.MemberName = nameof(UpdateSchema);
-            Parameters.ParametersValue = this.objectSerializationHelper.ToByteArray<UpdateSchemaParameters>(updateSchemaParameters);
-            IDataResult DataResult = FunctionClient.ExecuteFunction(Parameters);
-            var UpdateSchemaResult = this.objectSerializationHelper.GetObjectsFromByteArray<UpdateSchemaResult>(DataResult.ResultValue);
+            Parameters.ParametersValue = objectSerializationHelper.ToByteArray<UpdateSchemaParameters>(updateSchemaParameters);
+            var DataResult = FunctionClient.ExecuteFunction(Parameters);
+            var UpdateSchemaResult = objectSerializationHelper.GetObjectsFromByteArray<UpdateSchemaResult>(DataResult.ResultValue);
             return UpdateSchemaResult;
         }
 
         public async virtual Task<UpdateSchemaResult> UpdateSchemaAsync(CancellationToken cancellationToken, bool doNotCreateIfFirstTableNotExist, params DBTable[] tables)
         {
             IDataParameters Parameters = new DataParameters();
-            UpdateSchemaParameters updateSchemaParameters = new UpdateSchemaParameters(doNotCreateIfFirstTableNotExist, tables);
+            var updateSchemaParameters = new UpdateSchemaParameters(doNotCreateIfFirstTableNotExist, tables);
             Parameters.MemberName = nameof(UpdateSchema);
-            Parameters.ParametersValue = this.objectSerializationHelper.ToByteArray<UpdateSchemaParameters>(updateSchemaParameters);
-            IDataResult DataResult = await FunctionClientAsync.ExecuteFunctionAsync(Parameters);
-            var UpdateSchemaResult = this.objectSerializationHelper.GetObjectsFromByteArray<UpdateSchemaResult>(DataResult.ResultValue);
+            Parameters.ParametersValue = objectSerializationHelper.ToByteArray<UpdateSchemaParameters>(updateSchemaParameters);
+            var DataResult = await FunctionClientAsync.ExecuteFunctionAsync(Parameters);
+            var UpdateSchemaResult = objectSerializationHelper.GetObjectsFromByteArray<UpdateSchemaResult>(DataResult.ResultValue);
             return UpdateSchemaResult;
         }
 
         protected virtual object Do(string command, object args)
         {
             IDataParameters Parameters = new DataParameters();
-            CommandChannelDoParams commandChannelDoParams = new CommandChannelDoParams(command, args);
+            var commandChannelDoParams = new CommandChannelDoParams(command, args);
             Parameters.MemberName = nameof(Do);
-            Parameters.ParametersValue = this.objectSerializationHelper.ToByteArray<CommandChannelDoParams>(commandChannelDoParams);
-            IDataResult DataResult = FunctionClient.ExecuteFunction(Parameters);
+            Parameters.ParametersValue = objectSerializationHelper.ToByteArray<CommandChannelDoParams>(commandChannelDoParams);
+            var DataResult = FunctionClient.ExecuteFunction(Parameters);
 
 
             switch (commandChannelDoParams.Command)
@@ -104,7 +113,7 @@ namespace Xenial.Doughnut.FrontEnd
 
                 case CommandChannelHelper.Command_ExecuteScalarSQL:
                 case CommandChannelHelper.Command_ExecuteScalarSQLWithParams:
-                    return this.objectSerializationHelper.GetObjectsFromByteArray<object>(DataResult.ResultValue);
+                    return objectSerializationHelper.GetObjectsFromByteArray<object>(DataResult.ResultValue);
 
 
                 case CommandChannelHelper.Command_ExecuteQuerySQL:
@@ -113,12 +122,12 @@ namespace Xenial.Doughnut.FrontEnd
                 case CommandChannelHelper.Command_ExecuteQuerySQLWithMetadataWithParams:
                 case CommandChannelHelper.Command_ExecuteStoredProcedure:
                 case CommandChannelHelper.Command_ExecuteStoredProcedureParametrized:
-                    return this.objectSerializationHelper.GetObjectsFromByteArray<SelectedData>(DataResult.ResultValue);
+                    return objectSerializationHelper.GetObjectsFromByteArray<SelectedData>(DataResult.ResultValue);
 
 
                 case CommandChannelHelper.Command_ExecuteNonQuerySQL:
                 case CommandChannelHelper.Command_ExecuteNonQuerySQLWithParams:
-                    return this.objectSerializationHelper.GetObjectsFromByteArray<int>(DataResult.ResultValue);
+                    return objectSerializationHelper.GetObjectsFromByteArray<int>(DataResult.ResultValue);
 
 
                 default:
@@ -126,9 +135,6 @@ namespace Xenial.Doughnut.FrontEnd
             }
         }
 
-        object ICommandChannel.Do(string command, object args)
-        {
-            return this.Do(command, args);
-        }
+        object ICommandChannel.Do(string command, object args) => Do(command, args);
     }
 }

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Xenial.Doughnut.FrontEnd.Pages
 {
-    public class _HostAuthModel : PageModel
+    public class HostAuthModel : PageModel
     {
         public IActionResult OnGet()
         {
@@ -20,10 +17,7 @@ namespace Xenial.Doughnut.FrontEnd.Pages
             return Page();
         }
 
-        public IActionResult OnGetLogin()
-        {
-            return Challenge("oidc");
-        }
+        public IActionResult OnGetLogin() => Challenge("oidc");
 
         public async Task OnGetLogout()
         {

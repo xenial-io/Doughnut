@@ -1,7 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System;
 
 using BIT.Xpo.Providers.WebApi.AspNetCore;
 
@@ -9,11 +6,9 @@ using IdentityServer4.AccessTokenValidation;
 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Net.Http.Headers;
 
 namespace Xenial.Doughnut.Server
 {
@@ -25,10 +20,7 @@ namespace Xenial.Doughnut.Server
         /// <param name="configuration">The configuration.</param>
         /// <param name="environment">The environment.</param>
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
-        {
-            Configuration = configuration;
-            Environment = environment;
-        }
+            => (Configuration, Environment) = (configuration, environment);
 
         /// <summary>
         /// Gets the configuration.

@@ -1,5 +1,4 @@
-﻿using Skclusive.Material.Component;
-using Skclusive.Material.Layout;
+﻿using Skclusive.Material.Layout;
 
 namespace Xenial.Doughnut.FrontEnd
 {
@@ -17,14 +16,8 @@ namespace Xenial.Doughnut.FrontEnd
         {
         }
 
-        protected override IDashboardViewConfig Config()
-        {
-            return (IDashboardViewConfig)_config;
-        }
+        protected override IDashboardViewConfig Config() => (IDashboardViewConfig)_config;
 
-        protected override DashboardViewConfigBuilder Builder()
-        {
-            return this;
-        }
+        protected override DashboardViewConfigBuilder Builder() => this;
     }
 }

@@ -1,10 +1,9 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
 
 using BIT.Data.Functions;
 using BIT.Data.Services;
-using BIT.Xpo.DataStores;
 
 using DevExpress.Xpo.DB;
 using DevExpress.Xpo.DB.Helpers;
@@ -41,8 +40,10 @@ namespace Xenial.Doughnut.FrontEnd
             var Controller = Parser.GetPartByName(ControllerPart);
             var DataStoreId = Parser.GetPartByName(DataStoreIdPart);
 
-            var Headers = new Dictionary<string, string>();
-            Headers.Add(DataStoreIdPart, DataStoreId);
+            var Headers = new Dictionary<string, string>
+            {
+                { DataStoreIdPart, DataStoreId }
+            };
             var uri = new Uri(new Uri(Url), Controller);
             var url = uri.ToString();
 

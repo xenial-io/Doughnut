@@ -1,0 +1,72 @@
+﻿@inject UnitOfWork uow
+
+<DetailDialog Open="@Open" OnClosed="@(async () => await Close())" OnSave="@(async () => await Save())" Title="Add Activity">
+    <FormControl Style="margin-bottom: 8px;"
+                    FullWidth>
+        <InputLabel For="component-helper">
+            Name
+        </InputLabel>
+        <StandardInput Id="component-helper"
+                    Value="@Activity.Name"
+                    OnChange="@OnNameChanged" />
+    </FormControl>
+
+    <FormControl Style="margin-bottom: 8px;"
+                    FullWidth>
+        <InputLabel For="component-helper">
+            Price
+        </InputLabel>
+        <StandardInput Id="component-helper"
+                    Value="@Activity.Price.ToString()"
+                    OnChange="@OnPriceChanged">
+            <EndAdornment>
+                <InputAdornment
+                    Adornment="€"
+                    Position="@InputPosition.End" />
+            </EndAdornment>
+        </StandardInput>
+    </FormControl>
+
+</DetailDialog>
+
+@code {
+    [Parameter]
+    public bool Open { get; set; }
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Activity = await uow.GetObjectByKeyAsync<Activity>(Id);
+        await base.OnParametersSetAsync();
+    }
+
+    [Parameter]
+    public EventCallback OnClosed { get; set; } = EventCallback.Empty;
+
+    private Activity Activity { get; set; }
+
+    private void OnNameChanged(ChangeEventArgs args)
+    {
+        Activity.Name = args.Value?.ToString();
+    }
+
+    private void OnPriceChanged(ChangeEventArgs args)
+    {
+        if(decimal.TryParse(args.Value?.ToString(), out var price))
+        {
+            Activity.Price = price;
+        }
+    }
+
+    public async Task Close()
+    {
+        Open = false;
+        await OnClosed.InvokeAsync();
+    }
+
+    private async Task Save()
+    {
+        await uow.CommitChangesAsync();
+    }
+}

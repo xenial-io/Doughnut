@@ -32,7 +32,7 @@
         OnClick="@Refresh"
         aria-label="refresh">
         <RefreshIcon />
-    </IconButton>    
+    </IconButton>
 </Toolbar>
 @if(IsLoading)
 {
@@ -116,26 +116,36 @@ else
                                 Component="th"
                                 Padding="@Padding.None"
                                 Scope="row">
-                                @row.Item.Name
+                                <a style="cursor: pointer; text-decoration: underline; font-weight: bold;" @onclick="(() => EditRow(row.Item))">@row.Item.Name</a>
                             </TableCell>
                             <TableCell
                                 Align="@Align.Left"
                                 Padding="@Padding.None">
-                                @row.Item.Price.ToString("0.00€") 
+                                @row.Item.Price.ToString("0.00€")
                             </TableCell>
                         </TableRow>
                     }
                 </TableBody>
             </Table>
         </div>
-    } 
+    }
 }
 
-<AddActivity Open="@ShowNew" OnClosed="@(async () => await Refresh())" />
+@if(ShowNew)
+{
+    <AddActivity Open="@ShowNew" OnClosed="@(async () => await Refresh())" />
+}
+
+@if(ShowEdit)
+{
+    <EditActivity Open="@ShowEdit" Id="@(EditId ?? -1)" OnClosed="@(async () => await Refresh())" />
+}
 
 @code {
     private bool ShowNew { get; set; }
+    private bool ShowEdit { get; set; }
     private bool IsLoading { get; set; } = true;
+    private int? EditId { get; set; }
 
     private string OrderBy { set; get; } = "Calories";
 
@@ -241,6 +251,8 @@ else
     async Task Refresh()
     {
         ShowNew = false;
+        ShowEdit = false;
+        EditId = null;
         IsLoading = true;
         try
         {
@@ -256,6 +268,14 @@ else
     void New()
     {
         ShowNew = true;
+    }
+
+
+
+    void EditRow(Activity activity)
+    {
+        EditId = activity.Oid;
+        ShowEdit = true;
     }
 
     public class Selectable<T>

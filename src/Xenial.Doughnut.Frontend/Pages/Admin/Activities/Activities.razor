@@ -1,298 +1,35 @@
-﻿@page "/admin/activities"
+﻿
+@page "/admin/activities"
 
-@inject UnitOfWork uow
-
-<style>
-    .custom-theme {
-        display: inline;
-        --theme-palette-primary-main: #4caf50;
-        --theme-palette-primary-current: #388e3c;
-    }
-</style>
-
-<Typography
-    Variant="@TypographyVariant.H4">
-    <WorkIcon /> Activities
-</Typography>
-
-<Toolbar Disabled="@IsLoading">
-    <IconButton
-        Disabled="@IsLoading"
-        OnClick="New"
-        aria-label="new">
-        <AddCircleIcon />
-    </IconButton>
-    <IconButton
-        Disabled="@(IsLoading || !HasSelection)"
-        aria-label="delete"
-        OnClick="@Delete">
-        <DeleteIcon />
-    </IconButton>
-    <IconButton
-        Disabled="@IsLoading"
-        OnClick="@Refresh"
-        aria-label="refresh">
-        <RefreshIcon />
-    </IconButton>
-</Toolbar>
-@if(IsLoading)
-{
-    <CircularProgress
-            Variant="@CircularProgressVariant.Indeterminate"
-            DisableShrink
-            Size="64"
-            Thickness="4" />
-}
-else
-{
-    @if(!Rows.Any())
-    {
-        <Paper>
-            <Typography
-                    Variant="@TypographyVariant.Body1"
-                    GutterBottom>
-                    There are currently no entires.
-            </Typography>
-            <Typography Variant="@TypographyVariant.Body1"
-                        GutterBottom>
-                    Do you want to create a new one?
-            </Typography>
-            <Typography Variant="@TypographyVariant.Body1"
-                        GutterBottom>
-                <div class="custom-theme">
-                    <Button Variant="@ButtonVariant.Contained"
-                            OnClick="New"
-                            Color="@Color.Primary"
-                            Style="margin: 8px;">
-                        New
-                    </Button>
-                </div>
-            </Typography>
-        </Paper>
-    }
-    else
-    {
-        <div
-            style="overflow-x: auto;">
-            <Table
-                Style="min-width: 750px"
-                Size="@Size"
-                aria-labelledby="tableTitle"
-                aria-label="enhanced table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell
-                            Padding="@Padding.Checkbox">
-                            <Checkbox
-                                OnChange="@OnSelectAllClick"
-                                InputProps="@(new Dictionary<string, object>{{ "aria-label", $"select all activities" }})" />
-                        </TableCell>
-                        <TableCell
-                            Padding="@Padding.None">
-                            @CreateSortableColumn(nameof(Activity.Name), "Name")
-                        </TableCell>
-                        <TableCell
-                            Padding="@Padding.None">
-                            @CreateSortableColumn(nameof(Activity.Price), "Price")
-                        </TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    @foreach(var row in Rows)
-                    {
-                        <TableRow Hover
-                                  @key="@row"
-                                  OnClick="@((_) => row.Selected = !row.Selected)"
-                                  TabIndex="-1"
-                                  Selected="@row.Selected"
-                                  aria-checked="@row.Selected"
-                                  Role="checkbox">
-                            <TableCell
-                                Padding="@Padding.Checkbox">
-                                <Checkbox
-                                    Checked="@row.Selected"
-                                    InputProps="@(new Dictionary<string, object>{{ "aria-labelledby", $"enhanced-table-checkbox-{row.Item.Name}" }})" />
-                            </TableCell>
-                            <TableCell
-                                Component="th"
-                                Padding="@Padding.None"
-                                Scope="row">
-                                <a style="cursor: pointer; text-decoration: underline; font-weight: bold;" @onclick="(() => EditRow(row.Item))">@row.Item.Name</a>
-                            </TableCell>
-                            <TableCell
-                                Align="@Align.Left"
-                                Padding="@Padding.None">
-                                @row.Item.Price.ToString("0.00€")
-                            </TableCell>
-                        </TableRow>
-                    }
-                </TableBody>
-            </Table>
-        </div>
-    }
-}
-
-@if(ShowNew)
-{
-    <AddActivity Open="@ShowNew" OnClosed="@(async () => await Refresh())" />
-}
-
-@if(ShowEdit)
-{
-    <EditActivity Open="@ShowEdit" Id="@(EditId ?? -1)" OnClosed="@(async () => await Refresh())" />
-}
-
-@code {
-    private bool ShowNew { get; set; }
-    private bool ShowEdit { get; set; }
-    private bool IsLoading { get; set; } = true;
-    private int? EditId { get; set; }
-
-    private string OrderBy { set; get; } = nameof(Activity.Name);
-
-    private Sort Direction { set; get; } = Sort.Ascending;
-
-    private string SortMessage => "sort " + (Direction == Sort.Descending ? "descending" : "ascending");
-
-    private EventCallback<EventArgs> CreateOnSortClick(string name)
-    {
-        return EventCallback.Factory.Create<System.EventArgs>(this, (_) =>
-        {
-            HandleSortClick(name);
-        });
-    }
-
-    private void HandleSortClick(string name)
-    {
-        if (OrderBy == name)
-        {
-            Direction = Direction == Sort.Ascending ? Sort.Descending : Sort.Ascending;
-        }
-        else
-        {
-            Direction = Sort.Ascending;
-        }
-
-        OrderBy = name;
-
-        StateHasChanged();
-    }
-
-    private bool Dense { set; get; } = false;
-
-    private Size Size => Dense ? Size.Small : Size.Medium;
-
-    private bool AnySelected => HasSelection && SelectedCount < Rows.Count;
-
-    private bool AllSelected => Rows.All(row => row.Selected);
-
-    private int SelectedCount => Rows.Count(row => row.Selected);
-
-    private bool HasSelection => SelectedCount > 0;
-
-    private int RowsPerPage => 6;
-
-    private int EmptyRows => RowsPerPage - Rows.Count;
-
-    private int EmptyHeight => (Dense ? 33 : 53) * EmptyRows;
-
-    private void OnDenseChanged(EventArgs args)
-    {
-        Dense = !Dense;
-
-        StateHasChanged();
-    }
-
-    private void OnSelectAllClick(EventArgs args)
-    {
-        var allSelected = AllSelected;
-
-        foreach(var row in Rows)
-        {
-            row.Selected = !allSelected;
-        }
-
-        StateHasChanged();
-    }
-
-    private IList<Selectable<Activity>> Rows = new List<Selectable<Activity>>();
-
-    protected override async Task OnInitializedAsync()
-    {
-        IsLoading = true;
-        try
-        {
-            await uow.UpdateSchemaAsync();
-            await Refresh();
-        }
-        finally
-        {
-            IsLoading = false;
-        }
-    }
-
-    async Task Refresh()
-    {
-        ShowNew = false;
-        ShowEdit = false;
-        EditId = null;
-        IsLoading = true;
-        try
-        {
-            uow.DropIdentityMap();
-            var items = await uow.Query<Activity>().ToListAsync();
-            Rows = items.Select(i => new Selectable<Activity>(i)).ToList();
-        }
-        finally
-        {
-            IsLoading = false;
-        }
-    }
-
-    async Task Delete()
-    {
-        try
-        {
-            var items = Rows.Where(row => row.Selected).Select(row => row.Item);
-
-            foreach(var item in items)
-            {
-                await uow.DeleteAsync(item);
-            }
-
-            await uow.CommitChangesAsync();
-            await Refresh();
-        }
-        finally
-        {
-            IsLoading = false;
-        }
-    }
-
-    void New()
-    {
-        ShowNew = true;
-    }
-
-    void EditRow(Activity activity)
-    {
-        EditId = activity.Oid;
-        ShowEdit = true;
-    }
-
-    private RenderFragment CreateSortableColumn(string name, string label)
-    {
-        return @<TableSortLabel
-                    Active="@(OrderBy == name)"
-                    Direction="@Direction"
-                    OnClick="@CreateOnSortClick(name)">
-                    @label
-                    @if (OrderBy == name)
-                    {
-                        <span class="demo-sort-visually-hidden">
-                            @SortMessage
-                        </span>
-                    }
-                </TableSortLabel>;
-    }
-}
+<ListView TItem="Activity" Title="Activities">
+    <Icon><WorkIcon /></Icon>
+    <TableHeaderCells>
+        <TableCell
+            Padding="@Padding.None">
+            @context.CreateSortableColumn(nameof(Activity.Name), "Name")
+        </TableCell>
+        <TableCell
+            Padding="@Padding.None">
+            @context.CreateSortableColumn(nameof(Activity.Price), "Price")
+        </TableCell>
+    </TableHeaderCells>
+    <TableRows >
+        <TableCell
+            Component="th"
+            Padding="@Padding.None"
+            Scope="row">
+            <a style="cursor: pointer; text-decoration: underline; font-weight: bold;" @onclick="(() => context.Item2.EditRow(context.Item1))">@context.Item1.Name</a>
+        </TableCell>
+        <TableCell
+            Align="@Align.Left"
+            Padding="@Padding.None">
+            @context.Item1.Price.ToString("0.00€")
+        </TableCell>
+    </TableRows>
+    <AddDialog>
+        <AddActivity Open="@context.ShowNew" OnClosed="@(async () => await context.Refresh())" />
+    </AddDialog>
+    <EditDialog>
+        <EditActivity Open="@context.ShowEdit" Id="@(context.EditId ?? -1)" OnClosed="@(async () => await context.Refresh())" />
+    </EditDialog>
+</ListView>

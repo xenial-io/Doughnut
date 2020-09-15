@@ -1,0 +1,134 @@
+@typeparam TItem
+
+<style>
+    .custom-theme {
+        display: inline;
+        --theme-palette-primary-main: #4caf50;
+        --theme-palette-primary-current: #388e3c;
+    }
+</style>
+
+<Typography
+    Variant="@TypographyVariant.H4">
+    @Icon @Title
+</Typography>
+
+<Toolbar Disabled="@IsLoading">
+    <IconButton
+        Disabled="@IsLoading"
+        OnClick="New"
+        aria-label="new">
+        <AddCircleIcon />
+    </IconButton>
+    <IconButton
+        Disabled="@(IsLoading || !HasSelection)"
+        aria-label="delete"
+        OnClick="@Delete">
+        <DeleteIcon />
+    </IconButton>
+    <IconButton
+        Disabled="@IsLoading"
+        OnClick="@Refresh"
+        aria-label="refresh">
+        <RefreshIcon />
+    </IconButton>
+</Toolbar>
+@if(IsLoading)
+{
+    <CircularProgress
+            Variant="@CircularProgressVariant.Indeterminate"
+            DisableShrink
+            Size="64"
+            Thickness="4" />
+}
+else
+{
+    @if(!Rows.Any())
+    {
+        <Paper>
+            <Typography
+                    Variant="@TypographyVariant.Body1"
+                    GutterBottom>
+                    There are currently no entires.
+            </Typography>
+            <Typography Variant="@TypographyVariant.Body1"
+                        GutterBottom>
+                    Do you want to create a new one?
+            </Typography>
+            <Typography Variant="@TypographyVariant.Body1"
+                        GutterBottom>
+                <div class="custom-theme">
+                    <Button Variant="@ButtonVariant.Contained"
+                            OnClick="New"
+                            Color="@Color.Primary"
+                            Style="margin: 8px;">
+                        New
+                    </Button>
+                </div>
+            </Typography>
+        </Paper>
+    }
+    else
+    {
+        <div
+            style="overflow-x: auto;">
+            <Table
+                Style="min-width: 750px"
+                Size="@Size"
+                aria-labelledby="tableTitle"
+                aria-label="enhanced table">
+                <TableHead>
+                    <TableRow>
+                        <TableCell
+                            Padding="@Padding.Checkbox">
+                            <Checkbox
+                                OnChange="@OnSelectAllClick"
+                                InputProps="@(new Dictionary<string, object>{{ "aria-label", $"select all activities" }})" />
+                        </TableCell>
+                        @TableHeaderCells(this)
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    @foreach(var row in Rows)
+                    {
+                        <TableRow Hover
+                                  @key="row"
+                                  OnClick="@((_) => row.Selected = !row.Selected)"
+                                  TabIndex="-1"
+                                  Selected="@row.Selected"
+                                  aria-checked="@row.Selected"
+                                  Role="checkbox">
+                            <TableCell
+                                Padding="@Padding.Checkbox">
+                                <Checkbox Checked="@row.Selected" />
+                            </TableCell>
+                            @TableRows((row.Item, this))
+                        </TableRow>
+                    }
+                </TableBody>
+            </Table>
+        </div>
+    }
+}
+
+@if(ShowNew)
+{
+    @AddDialog(this)
+}
+
+@if(ShowEdit)
+{
+    @EditDialog(this)
+}
+
+@code {
+    public RenderFragment CreateSortableColumn(string name, string label)
+    {
+        return @<TableSortLabel
+                    Active="@(OrderBy == name)"
+                    Direction="@Direction"
+                    OnClick="@CreateOnSortClick(name)">
+                    @label
+                </TableSortLabel>;
+    }
+}

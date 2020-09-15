@@ -24,7 +24,8 @@
     </IconButton>
     <IconButton
         Disabled="@(IsLoading || !HasSelection)"
-        aria-label="delete">
+        aria-label="delete"
+        OnClick="@Delete">
         <DeleteIcon />
     </IconButton>
     <IconButton
@@ -256,8 +257,29 @@ else
         IsLoading = true;
         try
         {
+            uow.DropIdentityMap();
             var items = await uow.Query<Activity>().ToListAsync();
             Rows = items.Select(i => new Selectable<Activity>(i)).ToList();
+        }
+        finally
+        {
+            IsLoading = false;
+        }
+    }
+
+    async Task Delete()
+    {
+        try
+        {
+            var items = Rows.Where(row => row.Selected).Select(row => row.Item);
+
+            foreach(var item in items)
+            {
+                await uow.DeleteAsync(item);
+            }
+
+            await uow.CommitChangesAsync();
+            await Refresh();
         }
         finally
         {

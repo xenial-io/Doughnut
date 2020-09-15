@@ -7,6 +7,8 @@
     DisableBackdropClick
     FullScreen="@FullScreen"
     aria-labelledby="responsive-dialog-title"
+    OnClose="@(async () => await OnClose())"
+    OnEscapeKeyDown="@(async () => await OnClose())"
     Open="@Open">
     @if(Title is not null)
     {
@@ -57,14 +59,6 @@
     private async Task OnClose()
     {
         Open = false;
-
-        StateHasChanged();
-        await OnClosed.InvokeAsync();
-    }
-
-    private async Task OnOpen()
-    {
-        Open = true;
 
         StateHasChanged();
         await OnClosed.InvokeAsync();

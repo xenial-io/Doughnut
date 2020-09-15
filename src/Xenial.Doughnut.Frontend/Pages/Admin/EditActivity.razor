@@ -1,6 +1,9 @@
 ﻿@inject UnitOfWork uow
 
-<DetailDialog Open="@Open" OnClosed="@(async () => await Close())" OnSave="@(async () => await Save())" Title="Add Activity">
+<DetailDialog Open="@Open"
+              OnClosed="@(async () => await Close())"
+              OnSave="@(async () => await Save())"
+              Title="Edit Activity">
     <FormControl Style="margin-bottom: 8px;"
                     FullWidth>
         <InputLabel For="component-helper">
@@ -66,7 +69,5 @@
     }
 
     private async Task Save()
-    {
-        await uow.CommitChangesAsync();
-    }
+        => await uow.CommitChangesAsync();
 }

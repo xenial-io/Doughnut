@@ -1,0 +1,52 @@
+@page "/admin/customers"
+
+<ListView TItem="Customer" Title="Customers">
+    <Icon><PeopleIcon /></Icon>
+    <TableHeaderCells>
+        <TableCell
+            Padding="@Padding.None">
+            @context.CreateSortableColumn(nameof(Customer.Name), "Name")
+        </TableCell>
+        <TableCell
+            Padding="@Padding.None">
+            @context.CreateSortableColumn(nameof(Customer.Street), "Street")
+        </TableCell>
+        <TableCell
+            Padding="@Padding.None">
+            @context.CreateSortableColumn(nameof(Customer.ZipCode), "Zipcode")
+        </TableCell>
+        <TableCell
+            Padding="@Padding.None">
+            @context.CreateSortableColumn(nameof(Customer.City), "City")
+        </TableCell>
+    </TableHeaderCells>
+    <TableRows >
+        <TableCell
+            Component="th"
+            Padding="@Padding.None"
+            Scope="row">
+            <a style="cursor: pointer; text-decoration: underline; font-weight: bold;" @onclick="(() => context.Item2.EditRow(context.Item1))">@context.Item1.Name</a>
+        </TableCell>
+        <TableCell
+            Align="@Align.Left"
+            Padding="@Padding.None">
+            @context.Item1.Street
+        </TableCell>
+        <TableCell
+            Align="@Align.Left"
+            Padding="@Padding.None">
+            @context.Item1.ZipCode
+        </TableCell>
+        <TableCell
+            Align="@Align.Left"
+            Padding="@Padding.None">
+            @context.Item1.City
+        </TableCell>
+    </TableRows>
+    <AddDialog>
+        <AddCustomer Open="@context.ShowNew" OnClosed="@(async () => await context.Refresh())" />
+    </AddDialog>
+    <EditDialog>
+        <EditCustomer Open="@context.ShowEdit" Id="@(context.EditId ?? -1)" OnClosed="@(async () => await context.Refresh())" />
+    </EditDialog>
+</ListView>

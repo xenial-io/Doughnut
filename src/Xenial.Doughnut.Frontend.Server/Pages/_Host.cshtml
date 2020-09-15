@@ -1,6 +1,6 @@
 ﻿@page "/{handler?}"
-@model Xenial.Doughnut.FrontEnd.Pages.HostAuthModel
-@namespace Xenial.Doughnut.FrontEnd.Server.Pages
+@model Xenial.Doughnut.Frontend.Pages.HostAuthModel
+@namespace Xenial.Doughnut.Frontend.Server.Pages
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     Layout = null;
@@ -14,11 +14,11 @@
     <title>Dashboard.Server</title>
     <base href="~/" />
 </head>
-<body>   
+<body>
     @if (User.Identity.IsAuthenticated)
     {
         <app>
-            <component type="typeof(Xenial.Doughnut.FrontEnd.App)" render-mode="Server" />
+            <component type="typeof(Xenial.Doughnut.Frontend.App)" render-mode="Server" />
         </app>
 
         <script src="_framework/blazor.server.js"></script>

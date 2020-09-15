@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
-namespace Xenial.Doughnut.FrontEnd.Pages
+namespace Xenial.Doughnut.Frontend.Pages
 {
     public class HostAuthModel : PageModel
     {

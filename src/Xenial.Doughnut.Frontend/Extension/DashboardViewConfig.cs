@@ -1,6 +1,6 @@
 ﻿using Skclusive.Material.Layout;
 
-namespace Xenial.Doughnut.FrontEnd
+namespace Xenial.Doughnut.Frontend
 {
     public interface IDashboardViewConfig : ILayoutConfig
     {

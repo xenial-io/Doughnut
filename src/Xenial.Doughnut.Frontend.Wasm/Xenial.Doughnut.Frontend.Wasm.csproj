@@ -2,11 +2,11 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Xenial.Doughnut.FrontEnd</RootNamespace>
+    <RootNamespace>Xenial.Doughnut.Frontend</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Xenial.Doughnut.FrontEnd\Xenial.Doughnut.FrontEnd.csproj" />
+    <ProjectReference Include="..\Xenial.Doughnut.Frontend\Xenial.Doughnut.Frontend.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -14,11 +14,11 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.0-rc.1.20451.17" PrivateAssets="all" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.0-rc.1.20451.17" PrivateAssets="all" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Watch Include="..\**\*.razor" />
     <Watch Include="..\**\*.scss" />
     <Watch Include="..\**\*.cs" />
   </ItemGroup>
-  
+
 </Project>

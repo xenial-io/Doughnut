@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace Xenial.Doughnut.FrontEnd.Server
+namespace Xenial.Doughnut.Frontend.Server
 {
     public class Program
     {

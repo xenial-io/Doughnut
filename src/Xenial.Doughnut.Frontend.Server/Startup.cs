@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 
-namespace Xenial.Doughnut.FrontEnd.Server
+namespace Xenial.Doughnut.Frontend.Server
 {
     public class Startup
     {

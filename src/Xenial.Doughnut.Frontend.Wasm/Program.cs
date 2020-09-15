@@ -15,7 +15,7 @@ using Skclusive.Material.Component;
 
 using Xenial.Doughnut.Model;
 
-namespace Xenial.Doughnut.FrontEnd
+namespace Xenial.Doughnut.Frontend
 {
     public class Program
     {

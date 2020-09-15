@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <RootNamespace>Xenial.Doughnut.FrontEnd</RootNamespace>
+    <RootNamespace>Xenial.Doughnut.Frontend</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -29,13 +29,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Xenial.Doughnut.FrontEnd\Xenial.Doughnut.FrontEnd.csproj" />
+    <ProjectReference Include="..\Xenial.Doughnut.Frontend\Xenial.Doughnut.Frontend.csproj" />
   </ItemGroup>
-  
+
   <ItemGroup>
     <Watch Include="..\**\*.razor" />
     <Watch Include="..\**\*.scss" />
     <Watch Include="..\**\*.cs" />
   </ItemGroup>
-  
+
 </Project>

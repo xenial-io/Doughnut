@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "Xenial.Doughnut.FrontEnd.Wasm": {
+    "Xenial.Doughnut.Frontend.Wasm": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
       "launchBrowser": true,

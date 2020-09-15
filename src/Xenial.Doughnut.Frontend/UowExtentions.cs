@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Xenial.Doughnut.Model;
 
-namespace Xenial.Doughnut.FrontEnd
+namespace Xenial.Doughnut.Frontend
 {
     public static class UowExtentions
     {

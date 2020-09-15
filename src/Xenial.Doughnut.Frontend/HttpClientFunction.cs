@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 using BIT.Data.Functions;
 
-namespace Xenial.Doughnut.FrontEnd
+namespace Xenial.Doughnut.Frontend
 {
     public class HttpClientFunction : IFunction, IFunctionAsync
     {

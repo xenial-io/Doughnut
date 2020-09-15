@@ -1,0 +1,69 @@
+﻿@inject UnitOfWork uow
+
+<DetailDialog Open="@Open" OnClosed="@(async () => await Close())" OnSave="@(async () => await Save())" Title="Add Activity">
+    <FormControl Style="margin-bottom: 8px;"
+                    FullWidth>
+        <InputLabel For="component-helper">
+            Name
+        </InputLabel>
+        <StandardInput Id="component-helper"
+                    Value="@Name"
+                    OnChange="@OnNameChanged" />
+    </FormControl>
+
+    <FormControl Style="margin-bottom: 8px;"
+                    FullWidth>
+        <InputLabel For="component-helper">
+            Price
+        </InputLabel>
+        <StandardInput Id="component-helper"
+                    Value="@Price"
+                    OnChange="@OnPriceChanged">
+            <EndAdornment>
+                <InputAdornment
+                    Adornment="€"
+                    Position="@InputPosition.End" />
+            </EndAdornment>
+        </StandardInput>
+    </FormControl>
+
+</DetailDialog>
+
+@code {
+    [Parameter]
+    public bool Open { get; set; }
+    [Parameter]
+    public EventCallback OnClosed { get; set; } = EventCallback.Empty;
+
+    private string Name { get; set; }
+    private string Price { get; set; }
+
+    private void OnNameChanged(ChangeEventArgs args)
+    {
+        Name = args.Value?.ToString();
+    }
+
+    private void OnPriceChanged(ChangeEventArgs args)
+    {
+        Price = args.Value?.ToString();
+    }
+
+    public async Task Close()
+    {
+        Open = false;
+        await OnClosed.InvokeAsync();
+    }
+
+    private async Task Save()
+    {
+        if(!string.IsNullOrEmpty(Name) && decimal.TryParse(Price, out var price))
+        {
+            var activity = new Activity(uow)
+            {
+                Name = Name,
+                Price = price
+            };
+            await uow.CommitChangesAsync();
+        }
+    }
+}

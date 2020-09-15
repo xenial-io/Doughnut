@@ -17,41 +17,7 @@
         </DialogTitle>
     }
     <DialogContent>
-        <DialogContentText>
-            Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-              Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-              Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-              Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-              Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-              Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-              Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-              Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-              Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-              Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-              Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-              Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-              Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-              Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-              Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-              Let Google help apps determine location. This means sending anonymous location data to
-            Google, even when no apps are running.
-
-        </DialogContentText>
+        @ChildContent
     </DialogContent>
     <DialogActions>
         <Button
@@ -60,7 +26,7 @@
             Cancel
         </Button>
         <Button
-            OnClick="@OnClose"
+            OnClick="@Save"
             Color="@Color.Primary"
             AutoFocus>
             Save
@@ -76,36 +42,42 @@
     [Parameter]
     public bool Open { set; get; }
 
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback OnClosed { get; set; } = EventCallback.Empty;
+
+    [Parameter]
+    public EventCallback OnSave { get; set; } = EventCallback.Empty;
+
     private IDisposable TimeoutDisposal { set; get; }
 
     private bool FullScreen { set; get; }
 
-    private RadioGroup RadioGroupRef { set; get; }
-
-    private string Text => (Open ? "Close" : "Open") + " responsive dialog";
-
-    private void OnClose()
+    private async Task OnClose()
     {
         Open = false;
 
         StateHasChanged();
+        await OnClosed.InvokeAsync();
     }
 
-    private void OnOpen()
+    private async Task OnOpen()
     {
         Open = true;
 
         StateHasChanged();
+        await OnClosed.InvokeAsync();
     }
 
-    private void HandleClickListItem()
+    private async Task Save()
     {
-        Open = true;
-
-        StateHasChanged();
+        await OnSave.InvokeAsync();
+        await OnClose();
     }
 
-    protected override  Task OnInitializedAsync()
+    protected override Task OnInitializedAsync()
     {
         MediaQueryMatcher.OnChange += OnMediaQueryChanged;
 
@@ -114,6 +86,12 @@
         });
 
         return Task.CompletedTask;
+    }
+
+    protected override async Task OnAfterRenderAsync()
+    {
+        await MediaQueryMatcher.RegisterAsync("(max-width:959.95px)");
+        await base.OnAfterRenderAsync();
     }
 
     protected void OnMediaQueryChanged(object sender, bool match)

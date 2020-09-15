@@ -2,6 +2,14 @@
 
 @inject UnitOfWork uow
 
+<style>
+    .custom-theme {
+        display: inline;
+        --theme-palette-primary-main: #4caf50;
+        --theme-palette-primary-current: #388e3c;
+    }
+</style>
+
 <Typography
     Variant="@TypographyVariant.H4">
     <WorkIcon /> Activities
@@ -10,11 +18,12 @@
 <Toolbar Disabled="@IsLoading">
     <IconButton
         Disabled="@IsLoading"
+        OnClick="New"
         aria-label="new">
         <AddCircleIcon />
     </IconButton>
     <IconButton
-        Disabled="@IsLoading"
+        Disabled="@(IsLoading || !HasSelection)"
         aria-label="delete">
         <DeleteIcon />
     </IconButton>
@@ -23,18 +32,7 @@
         OnClick="@Refresh"
         aria-label="refresh">
         <RefreshIcon />
-    </IconButton>
-@*    <Typography
-        Class="demo-table-toolbar-title"
-        Variant="@TypographyVariant.H6"
-        Id="tableTitle">
-        Nutrition
-    </Typography>
-    <IconButton
-        aria-label="filter list">
-        <FilterListIcon />
-    </IconButton>*@
-    
+    </IconButton>    
 </Toolbar>
 @if(IsLoading)
 {
@@ -46,85 +44,122 @@
 }
 else
 {
- <div
-    style="overflow-x: auto;">
-    <Table
-        Style="min-width: 750px"
-        Size="@Size"
-        aria-labelledby="tableTitle"
-        aria-label="enhanced table">
-        <TableHead>
-            <TableRow>
-                <TableCell
-                    Padding="@Padding.Checkbox">
-                    <Checkbox
-                        OnChange="@OnSelectAllClick"
-                        InputProps="@(new Dictionary<string, object>{{ "aria-label", $"select all desserts" }})" />
-                </TableCell>
-                <TableCell
-                    Padding="@Padding.None">
-                    @CreateSortableColumn("Name", "Dessert (100g serving)")
-                </TableCell>
-                @* <TableCell
-                    Align="@Align.Right">
-                    @CreateSortableColumn("Calories", "Calories")
-                </TableCell>
-                <TableCell
-                    Align="@Align.Right">
-                    @CreateSortableColumn("Fat", "Fat (g)")
-                </TableCell>
-                <TableCell
-                    Align="@Align.Right">
-                    @CreateSortableColumn("Carbs", "Carbs (g)")
-                </TableCell>
-                <TableCell
-                    Align="@Align.Right">
-                    @CreateSortableColumn("Protein", "Protein (g)")
-                </TableCell> *@
-            </TableRow>
-        </TableHead>
-        <TableBody>
-            @foreach(var row in Rows)
-            {
-                <TableRow
-                    Hover
-                    @key="@row.Oid">
-                    @* <TableCell
-                        Padding="@Padding.Checkbox">
-                        <Checkbox
-                            Checked="@row.Selected"
-                            InputProps="@(new Dictionary<string, object>{{ "aria-labelledby", $"enhanced-table-checkbox-{row.Name}" }})" />
-                    </TableCell> *@
-                    <TableCell
-                        Component="th"
-                        Padding="@Padding.None"
-                        Scope="row">
-                        @row.Name
-                    </TableCell>
-                    @* <TableCell
-                        Align="@Align.Right">
-                        @row.Calories
-                    </TableCell>
-                    <TableCell
-                        Align="@Align.Right">
-                        @row.Fat
-                    </TableCell>
-                    <TableCell
-                        Align="@Align.Right">
-                        @row.Carbs
-                    </TableCell>
-                    <TableCell
-                        Align="@Align.Right">
-                        @row.Protein
-                    </TableCell> *@
-                </TableRow>
-            }
-        </TableBody>
-    </Table>
-    @* <DetailDialog Open="true" /> *@
-    </div>
+    @if(!Rows.Any())
+    {
+        <Paper>
+            <Typography
+                    Variant="@TypographyVariant.Body1"
+                    GutterBottom>
+                    There are currently no entires.
+            </Typography>
+            <Typography Variant="@TypographyVariant.Body1"
+                        GutterBottom>
+                    Do you want to create a new one?
+            </Typography>
+            <Typography Variant="@TypographyVariant.Body1"
+                        GutterBottom>
+                <div class="custom-theme">
+                    <Button Variant="@ButtonVariant.Contained"
+                            OnClick="New"
+                            Color="@Color.Primary"
+                            Style="margin: 8px;">
+                        New
+                    </Button>
+                </div>
+            </Typography>
+        </Paper>
+    }
+    else
+    {
+        <div
+            style="overflow-x: auto;">
+            <Table
+                Style="min-width: 750px"
+                Size="@Size"
+                aria-labelledby="tableTitle"
+                aria-label="enhanced table">
+                <TableHead>
+                    <TableRow>
+                        <TableCell
+                            Padding="@Padding.Checkbox">
+                            <Checkbox
+                                OnChange="@OnSelectAllClick"
+                                InputProps="@(new Dictionary<string, object>{{ "aria-label", $"select all activities" }})" />
+                        </TableCell>
+                        <TableCell
+                            Padding="@Padding.None">
+                            @CreateSortableColumn(nameof(Activity.Name), "Name")
+                        </TableCell>
+                        <TableCell
+                            Padding="@Padding.None">
+                            @CreateSortableColumn(nameof(Activity.Price), "Price")
+                        </TableCell>
+                        @* <TableCell
+                            Align="@Align.Right">
+                            @CreateSortableColumn("Calories", "Calories")
+                        </TableCell>
+                        <TableCell
+                            Align="@Align.Right">
+                            @CreateSortableColumn("Fat", "Fat (g)")
+                        </TableCell>
+                        <TableCell
+                            Align="@Align.Right">
+                            @CreateSortableColumn("Carbs", "Carbs (g)")
+                        </TableCell>
+                        <TableCell
+                            Align="@Align.Right">
+                            @CreateSortableColumn("Protein", "Protein (g)")
+                        </TableCell> *@
+                    </TableRow>
+                </TableHead>
+                <TableBody>
+                    @foreach(var row in Rows)
+                    {
+                        <TableRow
+                            Hover
+                            @key="@row.Id">
+                            <TableCell
+                                Padding="@Padding.Checkbox">
+                                <Checkbox
+                                    Checked="@row.Selected"
+                                    InputProps="@(new Dictionary<string, object>{{ "aria-labelledby", $"enhanced-table-checkbox-{row.Item.Name}" }})" />
+                            </TableCell>
+                            <TableCell
+                                Component="th"
+                                Padding="@Padding.None"
+                                Scope="row">
+                                @row.Item.Name
+                            </TableCell>
+                            <TableCell
+                                Align="@Align.Right">
+                                @row.Item.Price
+                            </TableCell>
+                            @*
+                            <TableCell
+                                Align="@Align.Right">
+                                @row.Fat
+                            </TableCell>
+                            <TableCell
+                                Align="@Align.Right">
+                                @row.Carbs
+                            </TableCell>
+                            <TableCell
+                                Align="@Align.Right">
+                                @row.Protein
+                            </TableCell> *@
+                        </TableRow>
+                    }
+                </TableBody>
+            </Table>
+            @* <DetailDialog Open="true" /> *@
+        </div>
+    } 
 }
+
+<AddActivity Open="@ShowNew" OnClosed="@(async () => await Refresh())" />
+
 @code {
+    private bool ShowNew { get; set; }
     private bool IsLoading { get; set; } = true;
 
     private string OrderBy { set; get; } = "Calories";
@@ -159,42 +194,39 @@ else
 
     private void HandleSortClick(string name)
     {
-        /*
         if (OrderBy == name)
         {
             Direction = Direction == Sort.Ascending ? Sort.Descending : Sort.Ascending;
-        } else
+        }
+        else
         {
             Direction = Sort.Ascending;
         }
 
         OrderBy = name;
-        */
 
         StateHasChanged();
     }
 
     private string media = "@media";
 
-    //private string ToolbarClass => $"demo-table-toolbar{(HasSelection ? " demo-table-toolbar-hilight" : "")}";
-
     private bool Dense { set; get; } = false;
 
     private Size Size => Dense ? Size.Small : Size.Medium;
 
-    //private bool AnySelected => HasSelection && SelectedCount < Rows.Count;
+    private bool AnySelected => HasSelection && SelectedCount < Rows.Count;
 
-    //private bool AllSelected => Rows.All(row => row.Selected);
+    private bool AllSelected => Rows.All(row => row.Selected);
 
-    //private int SelectedCount => Rows.Count(row => row.Selected);
+    private int SelectedCount => Rows.Count(row => row.Selected);
 
-    //private bool HasSelection => SelectedCount > 0;
+    private bool HasSelection => SelectedCount > 0;
 
-    //private int RowsPerPage => 6;
+    private int RowsPerPage => 6;
 
-    //private int EmptyRows => RowsPerPage - Rows.Count;
+    private int EmptyRows => RowsPerPage - Rows.Count;
 
-    //private int EmptyHeight => (Dense ? 33 : 53) * EmptyRows;
+    private int EmptyHeight => (Dense ? 33 : 53) * EmptyRows;
 
     private void OnDenseChanged(EventArgs args)
     {
@@ -205,14 +237,17 @@ else
 
     private void OnSelectAllClick(EventArgs args)
     {
-        //var allSelected = AllSelected;
+        var allSelected = AllSelected;
 
-        //Rows.ForEach(row => row.Selected = !allSelected);
+        foreach(var row in Rows)
+        {
+            row.Selected = !allSelected;
+        }
 
         StateHasChanged();
     }
 
-    private IList<Customer> Rows = new List<Customer>();
+    private IList<Selectable<Activity>> Rows = new List<Selectable<Activity>>();
 
     protected override async Task OnInitializedAsync()
     {
@@ -230,14 +265,32 @@ else
 
     async Task Refresh()
     {
+        ShowNew = false;
         IsLoading = true;
         try
         {
-            Rows = await uow.Query<Customer>().ToListAsync();
+            var items = await uow.Query<Activity>().ToListAsync();
+            Rows = items.Select(i => new Selectable<Activity>(i)).ToList();
         }
         finally
         {
             IsLoading = false;
         }
+    }
+
+    void New()
+    {
+        ShowNew = true;
+    }
+
+    public class Selectable<T>
+        where T : DoughnutBaseObject
+    {
+        public int Id => Item.Oid;
+        public bool Selected { get; set; }
+        public T Item { get; }
+        public Selectable(T item)
+            => Item = item;
+
     }
 }

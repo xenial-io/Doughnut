@@ -7,7 +7,8 @@
 name: xenial.doughnut
 services:
 - name: xenial-doughnut-frontend-wasm
-  project: src/Xenial.Doughnut.FrontEnd.Wasm/Xenial.Doughnut.FrontEnd.Wasm.csproj
+  #project: src/Xenial.Doughnut.FrontEnd.Wasm/Xenial.Doughnut.FrontEnd.Wasm.csproj
+  external: true
   bindings:
   - protocol: https
     port: 6001

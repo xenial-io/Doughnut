@@ -7,16 +7,20 @@
     <WorkIcon /> Activities
 </Typography>
 
-<Toolbar>
+<Toolbar Disabled="@IsLoading">
     <IconButton
+        Disabled="@IsLoading"
         aria-label="new">
         <AddCircleIcon />
     </IconButton>
     <IconButton
+        Disabled="@IsLoading"
         aria-label="delete">
         <DeleteIcon />
     </IconButton>
     <IconButton
+        Disabled="@IsLoading"
+        OnClick="@Refresh"
         aria-label="refresh">
         <RefreshIcon />
     </IconButton>
@@ -32,6 +36,16 @@
     </IconButton>*@
     
 </Toolbar>
+@if(IsLoading)
+{
+    <CircularProgress
+            Variant="@CircularProgressVariant.Indeterminate"
+            DisableShrink
+            Size="64"
+            Thickness="4" />
+}
+else
+{
  <div
     style="overflow-x: auto;">
     <Table
@@ -107,10 +121,13 @@
             }
         </TableBody>
     </Table>
-    <DetailDialog Open="true" />
+    @* <DetailDialog Open="true" /> *@
     </div>
+}
 @code {
-     private string OrderBy { set; get; } = "Calories";
+    private bool IsLoading { get; set; } = true;
+
+    private string OrderBy { set; get; } = "Calories";
 
     private Sort Direction { set; get; } = Sort.Ascending;
 
@@ -199,12 +216,28 @@
 
     protected override async Task OnInitializedAsync()
     {
-        await uow.UpdateSchemaAsync();
-        await Refresh();
+        IsLoading = true;
+        try
+        {
+            await uow.UpdateSchemaAsync();
+            await Refresh();
+        }
+        finally
+        {
+            IsLoading = false;
+        }
     }
 
     async Task Refresh()
     {
-        Rows = await uow.Query<Customer>().ToListAsync();
+        IsLoading = true;
+        try
+        {
+            Rows = await uow.Query<Customer>().ToListAsync();
+        }
+        finally
+        {
+            IsLoading = false;
+        }
     }
 }

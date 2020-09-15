@@ -8,9 +8,9 @@
   <ItemGroup>
     <PackageReference Include="BIT.Xpo.Providers.WebApi.Client" Version="20.1.6.583700904" />
     <PackageReference Include="Bogus" Version="30.0.4" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0-preview.8.20414.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.0-preview.8.20414.8" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.0-preview.8.20414.8" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="5.0.0-rc.1.20451.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="5.0.0-rc.1.20451.17" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Authentication" Version="5.0.0-rc.1.20451.17" PrivateAssets="all" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0-preview.8.20407.11" />
     <PackageReference Include="Skclusive.Material.Component" Version="2.0.0" />
     <PackageReference Include="Skclusive.Material.Layout" Version="2.0.0" />

@@ -1,11 +1,10 @@
 ﻿@inject NavigationManager Navigation
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 
 @code 
 {
     protected override void OnInitialized()
     {
-        if(RuntimeInformation.IsOSPlatform(OSPlatform.Browser))
+        if(OperatingSystem.IsBrowser())
         {
             Navigation.NavigateTo($"authentication/login?returnUrl={Uri.EscapeDataString(Navigation.Uri)}");
         }

@@ -1,8 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Components.Authorization
-@using Microsoft.AspNetCore.Components.WebAssembly.Authentication
 
 @inject NavigationManager Navigation
-@*@inject SignOutSessionStateManager SignOutManager*@
 
 <AuthorizeView>
     <Authorized>
@@ -17,7 +15,7 @@
 @code{
     private void BeginSignOut(MouseEventArgs args)
     {
-        if (RuntimeInformation.IsOSPlatform(OSPlatform.Browser))
+        if (OperatingSystem.IsBrowser())
         {
             Navigation.NavigateTo("LogoutWasm");
         }

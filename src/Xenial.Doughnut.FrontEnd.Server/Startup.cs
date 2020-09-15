@@ -1,10 +1,10 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
-
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 
 namespace Xenial.Doughnut.FrontEnd.Server
@@ -13,11 +13,10 @@ namespace Xenial.Doughnut.FrontEnd.Server
     {
         public IConfiguration Configuration { get; }
         public IWebHostEnvironment Environment { get; }
+
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
             => (Configuration, Environment) = (configuration, environment);
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
             services.Configure<CookiePolicyOptions>(options =>
@@ -63,11 +62,19 @@ namespace Xenial.Doughnut.FrontEnd.Server
                 options.Scope.Add("profile");
                 options.Scope.Add("email");
                 options.Scope.Add("phone");
-                options.Scope.Add("Xenial.Doughnut.Server");
+                options.Scope.Add("Xenial.Doughnut.Backend");
 
                 options.SaveTokens = true;
-
             });
+
+            services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddHttpClient("Xenial.Doughnut.Backend")
+                .AddHttpMessageHandler(sp =>
+                     new ProtectedApiBearerTokenHandler(sp.GetRequiredService<IHttpContextAccessor>())
+                );
+
+            services.AddHttpUnitOfWork();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

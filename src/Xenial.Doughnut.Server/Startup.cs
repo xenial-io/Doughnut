@@ -52,7 +52,7 @@ namespace Xenial.Doughnut.Server
             .AddIdentityServerAuthentication(options =>
             {
                 options.Authority = Configuration.GetValue<string>("identityUrl");
-                options.ApiName = "Xenial.Doughnut.Server";
+                options.ApiName = "Xenial.Doughnut.Backend";
                 options.RequireHttpsMetadata = Environment.IsProduction();
 
                 options.EnableCaching = true;
@@ -69,7 +69,12 @@ namespace Xenial.Doughnut.Server
             }
 
             app.UseCors(policy =>
-                policy.WithOrigins("http://localhost:6000", "https://localhost:6001")
+                policy.WithOrigins(
+                    "http://localhost:6000",
+                    "https://localhost:6001",
+                    "https://localhost:6002",
+                    "https://localhost:6003"
+                )
                 .AllowAnyMethod()
                 .AllowAnyHeader()
                 .AllowCredentials()

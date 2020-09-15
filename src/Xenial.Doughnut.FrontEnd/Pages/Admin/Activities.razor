@@ -16,7 +16,10 @@
         aria-label="delete">
         <DeleteIcon />
     </IconButton>
-          
+    <IconButton
+        aria-label="refresh">
+        <RefreshIcon />
+    </IconButton>
 @*    <Typography
         Class="demo-table-toolbar-title"
         Variant="@TypographyVariant.H6"
@@ -41,8 +44,6 @@
                 <TableCell
                     Padding="@Padding.Checkbox">
                     <Checkbox
-                        Indeterminate="@AnySelected"
-                        Checked="@AllSelected"
                         OnChange="@OnSelectAllClick"
                         InputProps="@(new Dictionary<string, object>{{ "aria-label", $"select all desserts" }})" />
                 </TableCell>
@@ -50,7 +51,7 @@
                     Padding="@Padding.None">
                     @CreateSortableColumn("Name", "Dessert (100g serving)")
                 </TableCell>
-                <TableCell
+                @* <TableCell
                     Align="@Align.Right">
                     @CreateSortableColumn("Calories", "Calories")
                 </TableCell>
@@ -65,33 +66,28 @@
                 <TableCell
                     Align="@Align.Right">
                     @CreateSortableColumn("Protein", "Protein (g)")
-                </TableCell>
+                </TableCell> *@
             </TableRow>
         </TableHead>
         <TableBody>
-            @foreach(var row in GetSortedRows())
+            @foreach(var row in Rows)
             {
                 <TableRow
                     Hover
-                    @key="@row"
-                    OnClick="@((_) => row.Selected = !row.Selected)"
-                    TabIndex="-1"
-                    Selected="@row.Selected"
-                    aria-checked="@row.Selected"
-                    Role="checkbox">
-                    <TableCell
+                    @key="@row.Oid">
+                    @* <TableCell
                         Padding="@Padding.Checkbox">
                         <Checkbox
                             Checked="@row.Selected"
                             InputProps="@(new Dictionary<string, object>{{ "aria-labelledby", $"enhanced-table-checkbox-{row.Name}" }})" />
-                    </TableCell>
+                    </TableCell> *@
                     <TableCell
                         Component="th"
                         Padding="@Padding.None"
                         Scope="row">
                         @row.Name
                     </TableCell>
-                    <TableCell
+                    @* <TableCell
                         Align="@Align.Right">
                         @row.Calories
                     </TableCell>
@@ -106,15 +102,7 @@
                     <TableCell
                         Align="@Align.Right">
                         @row.Protein
-                    </TableCell>
-                </TableRow>
-            }
-            @if (EmptyRows > 0)
-            {
-                <TableRow
-                    Style="@($"height: {EmptyHeight}px;")">
-                    <TableCell
-                        colspan="6" />
+                    </TableCell> *@
                 </TableRow>
             }
         </TableBody>
@@ -152,38 +140,9 @@
         });
     }
 
-    private IEnumerable<Dessert> GetSortedRows()
-    {
-        if (Direction == Sort.Ascending)
-        {
-            if (OrderBy == "Name")
-                return Rows.OrderBy(row => row.Name);
-            else if (OrderBy == "Calories")
-                return Rows.OrderBy(row => row.Calories);
-            else if (OrderBy == "Fat")
-                return Rows.OrderBy(row => row.Fat);
-            else if (OrderBy == "Carbs")
-                return Rows.OrderBy(row => row.Carbs);
-            else if (OrderBy == "Protein")
-                return Rows.OrderBy(row => row.Protein);
-        } else
-        {
-            if (OrderBy == "Name")
-                return Rows.OrderByDescending(row => row.Name);
-            else if (OrderBy == "Calories")
-                return Rows.OrderByDescending(row => row.Calories);
-            else if (OrderBy == "Fat")
-                return Rows.OrderByDescending(row => row.Fat);
-            else if (OrderBy == "Carbs")
-                return Rows.OrderByDescending(row => row.Carbs);
-            else if (OrderBy == "Protein")
-                return Rows.OrderByDescending(row => row.Protein);
-        }
-        return Rows;
-    }
-
     private void HandleSortClick(string name)
     {
+        /*
         if (OrderBy == name)
         {
             Direction = Direction == Sort.Ascending ? Sort.Descending : Sort.Ascending;
@@ -193,31 +152,32 @@
         }
 
         OrderBy = name;
+        */
 
         StateHasChanged();
     }
 
     private string media = "@media";
 
-    private string ToolbarClass => $"demo-table-toolbar{(HasSelection ? " demo-table-toolbar-hilight" : "")}";
+    //private string ToolbarClass => $"demo-table-toolbar{(HasSelection ? " demo-table-toolbar-hilight" : "")}";
 
     private bool Dense { set; get; } = false;
 
     private Size Size => Dense ? Size.Small : Size.Medium;
 
-    private bool AnySelected => HasSelection && SelectedCount < Rows.Count;
+    //private bool AnySelected => HasSelection && SelectedCount < Rows.Count;
 
-    private bool AllSelected => Rows.All(row => row.Selected);
+    //private bool AllSelected => Rows.All(row => row.Selected);
 
-    private int SelectedCount => Rows.Count(row => row.Selected);
+    //private int SelectedCount => Rows.Count(row => row.Selected);
 
-    private bool HasSelection => SelectedCount > 0;
+    //private bool HasSelection => SelectedCount > 0;
 
-    private int RowsPerPage => 6;
+    //private int RowsPerPage => 6;
 
-    private int EmptyRows => RowsPerPage - Rows.Count;
+    //private int EmptyRows => RowsPerPage - Rows.Count;
 
-    private int EmptyHeight => (Dense ? 33 : 53) * EmptyRows;
+    //private int EmptyHeight => (Dense ? 33 : 53) * EmptyRows;
 
     private void OnDenseChanged(EventArgs args)
     {
@@ -228,51 +188,23 @@
 
     private void OnSelectAllClick(EventArgs args)
     {
-        var allSelected = AllSelected;
+        //var allSelected = AllSelected;
 
-        Rows.ForEach(row => row.Selected = !allSelected);
+        //Rows.ForEach(row => row.Selected = !allSelected);
 
         StateHasChanged();
     }
 
-    private List<Dessert> Rows = new List<Dessert>
+    private IList<Customer> Rows = new List<Customer>();
+
+    protected override async Task OnInitializedAsync()
     {
-        new Dessert("Frozen yoghurt", 159, 6.0, 24, 4.0),
+        await uow.UpdateSchemaAsync();
+        await Refresh();
+    }
 
-        new Dessert("Ice cream sandwich", 237, 9.0, 37, 4.3),
-
-        new Dessert("Eclair", 262, 16.0, 24, 6.0),
-
-        new Dessert("Cupcake", 305, 3.7, 67, 4.3),
-
-        new Dessert("Gingerbread", 356, 16.0, 49, 3.9)
-    };
-
-    public class Dessert
+    async Task Refresh()
     {
-        public Dessert(string name, int calories, double fat, double carbs, double protein)
-        {
-            Name = name;
-
-            Calories = calories;
-
-            Fat = fat;
-
-            Carbs = carbs;
-
-            Protein = protein;
-        }
-
-        public string Name { set; get; }
-
-        public int Calories { set; get; }
-
-        public double Fat { set; get; }
-
-        public double Carbs { set; get; }
-
-        public double Protein { set; get; }
-
-        public bool Selected { set; get; }
+        Rows = await uow.Query<Customer>().ToListAsync();
     }
 }

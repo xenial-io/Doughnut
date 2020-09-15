@@ -8,7 +8,10 @@ namespace Xenial.Doughnut.Model
         {
             typeof(DoughnutBaseObject),
 
+            typeof(Activity),
+
             typeof(TimeRecord),
+            typeof(TimeRecordEntry),
 
             typeof(Customer),
             typeof(CustomerProject)

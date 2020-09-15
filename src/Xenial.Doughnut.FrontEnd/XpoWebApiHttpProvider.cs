@@ -16,7 +16,6 @@ namespace Xenial.Doughnut.FrontEnd
         public const string DataStoreIdPart = "DataStoreId";
         private const string UrlPart = "Url";
         private const string ControllerPart = "Controller";
-        private const string SerializationPart = "Serialization";
         public XpoWebApiHttpProvider(
             IFunction functionClient,
             IObjectSerializationService objectSerializationService,

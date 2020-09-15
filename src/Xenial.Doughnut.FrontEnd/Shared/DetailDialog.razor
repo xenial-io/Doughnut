@@ -1,0 +1,137 @@
+﻿@inherits MaterialComponentBase
+
+@inject ILayoutConfig LayoutConfig
+@inject MediaQueryMatcher MediaQueryMatcher
+
+<Dialog
+    DisableBackdropClick
+    DisableEscapeKeyDown
+    FullScreen="@FullScreen"
+    aria-labelledby="responsive-dialog-title"
+    Open="@Open">
+    @if(Title is not null)
+    {
+        <DialogTitle
+            Id="responsive-dialog-title">
+            @Title
+        </DialogTitle>
+    }
+    <DialogContent>
+        <DialogContentText>
+            Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+              Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+              Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+              Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+              Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+              Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+              Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+              Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+              Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+              Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+              Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+              Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+              Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+              Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+              Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+              Let Google help apps determine location. This means sending anonymous location data to
+            Google, even when no apps are running.
+
+        </DialogContentText>
+    </DialogContent>
+    <DialogActions>
+        <Button
+            OnClick="@OnClose"
+            Color="@Color.Secondary">
+            Cancel
+        </Button>
+        <Button
+            OnClick="@OnClose"
+            Color="@Color.Primary"
+            AutoFocus>
+            Save
+        </Button>
+    </DialogActions>
+</Dialog>
+
+@code
+{
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public bool Open { set; get; }
+
+    private IDisposable TimeoutDisposal { set; get; }
+
+    private bool FullScreen { set; get; }
+
+    private RadioGroup RadioGroupRef { set; get; }
+
+    private string Text => (Open ? "Close" : "Open") + " responsive dialog";
+
+    private void OnClose()
+    {
+        Open = false;
+
+        StateHasChanged();
+    }
+
+    private void OnOpen()
+    {
+        Open = true;
+
+        StateHasChanged();
+    }
+
+    private void HandleClickListItem()
+    {
+        Open = true;
+
+        StateHasChanged();
+    }
+
+    protected override  Task OnInitializedAsync()
+    {
+        MediaQueryMatcher.OnChange += OnMediaQueryChanged;
+
+        TimeoutDisposal = ExecutionPlan.Delay(500, () => {
+            _ = MediaQueryMatcher.RegisterAsync("(max-width:959.95px)");
+        });
+
+        return Task.CompletedTask;
+    }
+
+    protected void OnMediaQueryChanged(object sender, bool match)
+    {
+        FullScreen = match;
+
+        StateHasChanged();
+    }
+
+    protected override void Dispose()
+    {
+        TimeoutDisposal?.Dispose();
+
+        if (LayoutConfig.Responsive)
+        {
+            MediaQueryMatcher.OnChange -= OnMediaQueryChanged;
+
+            _ = MediaQueryMatcher.UnRegisterAsync();
+        }
+    }
+}

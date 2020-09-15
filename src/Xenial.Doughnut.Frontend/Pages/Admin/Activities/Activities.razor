@@ -148,27 +148,11 @@ else
     private bool IsLoading { get; set; } = true;
     private int? EditId { get; set; }
 
-    private string OrderBy { set; get; } = "Calories";
+    private string OrderBy { set; get; } = nameof(Activity.Name);
 
     private Sort Direction { set; get; } = Sort.Ascending;
 
     private string SortMessage => "sort " + (Direction == Sort.Descending ? "descending" : "ascending");
-
-    private RenderFragment CreateSortableColumn(string name, string label)
-    {
-        return @<TableSortLabel
-                    Active="@(OrderBy == name)"
-                    Direction="@Direction"
-                    OnClick="@CreateOnSortClick(name)">
-                    @label
-                    @if (OrderBy == name)
-                    {
-                        <span class="demo-sort-visually-hidden">
-                            @SortMessage
-                        </span>
-                    }
-                </TableSortLabel>;
-    }
 
     private EventCallback<EventArgs> CreateOnSortClick(string name)
     {
@@ -193,8 +177,6 @@ else
 
         StateHasChanged();
     }
-
-    private string media = "@media";
 
     private bool Dense { set; get; } = false;
 
@@ -292,22 +274,25 @@ else
         ShowNew = true;
     }
 
-
-
     void EditRow(Activity activity)
     {
         EditId = activity.Oid;
         ShowEdit = true;
     }
 
-    public class Selectable<T>
-        where T : DoughnutBaseObject
+    private RenderFragment CreateSortableColumn(string name, string label)
     {
-        public int Id => Item.Oid;
-        public bool Selected { get; set; }
-        public T Item { get; }
-        public Selectable(T item)
-            => Item = item;
-
+        return @<TableSortLabel
+                    Active="@(OrderBy == name)"
+                    Direction="@Direction"
+                    OnClick="@CreateOnSortClick(name)">
+                    @label
+                    @if (OrderBy == name)
+                    {
+                        <span class="demo-sort-visually-hidden">
+                            @SortMessage
+                        </span>
+                    }
+                </TableSortLabel>;
     }
 }

@@ -51,12 +51,15 @@
 
     private void OnNameChanged(ChangeEventArgs args)
     {
-        Activity.Name = args.Value?.ToString();
+        if (Activity is not null)
+        {
+            Activity.Name = args.Value?.ToString();
+        }
     }
 
     private void OnPriceChanged(ChangeEventArgs args)
     {
-        if(decimal.TryParse(args.Value?.ToString(), out var price))
+        if (Activity is not null && decimal.TryParse(args.Value?.ToString(), out var price))
         {
             Activity.Price = price;
         }
@@ -65,6 +68,7 @@
     public async Task Close()
     {
         Open = false;
+        Activity = null;
         await OnClosed.InvokeAsync();
     }
 

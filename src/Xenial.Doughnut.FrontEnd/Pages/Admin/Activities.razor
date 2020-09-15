@@ -94,30 +94,18 @@ else
                             Padding="@Padding.None">
                             @CreateSortableColumn(nameof(Activity.Price), "Price")
                         </TableCell>
-                        @* <TableCell
-                            Align="@Align.Right">
-                            @CreateSortableColumn("Calories", "Calories")
-                        </TableCell>
-                        <TableCell
-                            Align="@Align.Right">
-                            @CreateSortableColumn("Fat", "Fat (g)")
-                        </TableCell>
-                        <TableCell
-                            Align="@Align.Right">
-                            @CreateSortableColumn("Carbs", "Carbs (g)")
-                        </TableCell>
-                        <TableCell
-                            Align="@Align.Right">
-                            @CreateSortableColumn("Protein", "Protein (g)")
-                        </TableCell> *@
                     </TableRow>
                 </TableHead>
                 <TableBody>
                     @foreach(var row in Rows)
                     {
-                        <TableRow
-                            Hover
-                            @key="@row.Id">
+                        <TableRow Hover
+                                  @key="@row"
+                                  OnClick="@((_) => row.Selected = !row.Selected)"
+                                  TabIndex="-1"
+                                  Selected="@row.Selected"
+                                  aria-checked="@row.Selected"
+                                  Role="checkbox">
                             <TableCell
                                 Padding="@Padding.Checkbox">
                                 <Checkbox
@@ -131,27 +119,14 @@ else
                                 @row.Item.Name
                             </TableCell>
                             <TableCell
-                                Align="@Align.Right">
-                                @row.Item.Price
+                                Align="@Align.Left"
+                                Padding="@Padding.None">
+                                @row.Item.Price.ToString("0.00€") 
                             </TableCell>
-                            @*
-                            <TableCell
-                                Align="@Align.Right">
-                                @row.Fat
-                            </TableCell>
-                            <TableCell
-                                Align="@Align.Right">
-                                @row.Carbs
-                            </TableCell>
-                            <TableCell
-                                Align="@Align.Right">
-                                @row.Protein
-                            </TableCell> *@
                         </TableRow>
                     }
                 </TableBody>
             </Table>
-            @* <DetailDialog Open="true" /> *@
         </div>
     } 
 }

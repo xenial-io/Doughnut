@@ -11,7 +11,7 @@
             Style="flex-grow: 1; margin-left: 20px;"
             Variant="@TypographyVariant.H6"
             NoWrap>
-            Skclusive Dashboard
+            Fa. Manuel Grundner
         </Typography>
     </TitleContent>
     <ActionsContent>
@@ -127,6 +127,13 @@
         },
         new NavigationItem
         {
+            Title = "Projects",
+            Path =  "admin/projects",
+            Icon =  @<ListIcon />,
+            Prefix =  true
+        },
+        new NavigationItem
+        {
             Title = "Customers",
             Path =  "admin/customers",
             Icon =  @<PeopleIcon />,
@@ -138,7 +145,15 @@
             Path =  "admin/activities",
             Icon =  @<WorkIcon />,
             Prefix =  true
-        }
+        },
+        new NavigationItem
+        {
+
+            Title = "Logout",
+            Path =  OperatingSystem.IsBrowser() ? "LogoutWasm" : "Logout",
+            Icon =  @<InputIcon />,
+            Prefix =  true
+        },
     };
 
     private string Notifications { set; get; } = "10";

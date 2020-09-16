@@ -1,0 +1,30 @@
+﻿
+@page "/admin/projects"
+
+<ListView TItem="CustomerProject" Title="Projects">
+    <Icon><ListIcon /></Icon>
+    <TableHeaderCells>
+        <TableCell
+            Padding="@Padding.None">
+            @context.CreateSortableColumn(nameof(CustomerProject.Name), "Name")
+        </TableCell>
+    </TableHeaderCells>
+    <TableRows >
+        <TableCell
+            Component="th"
+            Padding="@Padding.None"
+            Scope="row">
+            <a style="cursor: pointer; text-decoration: underline; font-weight: bold;" @onclick="(() => context.Item2.EditRow(context.Item1))">@context.Item1.Name</a>
+        </TableCell>
+    </TableRows>
+    <AddDialog>
+        <ObjectDetailDialog TItem="CustomerProject" Context="project" Title="New Project" Open="@context.ShowNew" OnClosed="@(async () => await context.Refresh())">
+            <ProjectDetail Item="@project" />
+        </ObjectDetailDialog>
+    </AddDialog>
+    <EditDialog>
+        <ObjectDetailDialog TItem="CustomerProject" Context="project" Title="Edit Project" Open="@context.ShowEdit" Id="@(context.EditId)" OnClosed="@(async () => await context.Refresh())">
+            <ProjectDetail Item="@project" />
+        </ObjectDetailDialog>
+    </EditDialog>
+</ListView>

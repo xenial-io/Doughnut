@@ -3,7 +3,9 @@
 @inject UnitOfWork uow
 
 <DetailDialog Open="@Open" OnClosed="@(async () => await Close())" OnSave="@(async () => await Save())" Title="@Title">
-    @ChildContent(Item)
+    <CascadingValue Value="@uow">
+        @ChildContent(Item)
+    </CascadingValue>
 </DetailDialog>
 
 @code {
@@ -15,8 +17,6 @@
     public EventCallback OnClosed { get; set; } = EventCallback.Empty;
     [Parameter]
     public Nullable<int> Id { get; set; }
-
-   
 
     protected override async Task OnParametersSetAsync()
     {
@@ -42,6 +42,7 @@
     }
     private async Task Save()
     {
+        Console.WriteLine(Item);
         await uow.CommitChangesAsync();
     }
 }

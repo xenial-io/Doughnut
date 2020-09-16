@@ -1,0 +1,23 @@
+﻿<MatTextField @bind-Value="@Item.Name" Label="Name" Required="true" FullWidth="@true"></MatTextField>
+
+<MatSelectItem @bind-Value="@Item.Customer" Items="@Customers" Label="Customer" FullWidth="@true">
+    <ItemTemplate>
+        @context.Name
+    </ItemTemplate>
+</MatSelectItem>
+
+@code { 
+    [Parameter]
+    public CustomerProject Item { get; set; }
+
+    [CascadingParameter]
+    public UnitOfWork uow { get; set; }
+    
+    private IReadOnlyList<Customer> Customers { get; set; } = new Customer[0];
+
+    protected override async Task OnParametersSetAsync()
+    {
+        Customers = await uow.Query<Customer>().ToListAsync();
+        await base.OnParametersSetAsync();
+    }
+}

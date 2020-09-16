@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 
 using DevExpress.Xpo;
 
@@ -48,7 +49,7 @@ namespace Xenial.Doughnut.Model
         [Persistent("TaxNumber")]
         public string TaxNumber { get => taxNumber; set => SetPropertyValue(ref taxNumber, value); }
 
-        [Association]
+        [Association("Customer-Projects"), Aggregated]
         public XPCollection<CustomerProject> Projects => GetCollection<CustomerProject>();
 
         private CustomerProject defaultProject;
@@ -67,20 +68,8 @@ namespace Xenial.Doughnut.Model
 
         private Customer customer;
         [Persistent("Customer")]
-        [Association]
-        public Customer Customer
-        {
-            get => customer; set => SetPropertyValue(ref customer, value, customer =>
-            {
-                if (customer != null && Session.IsNewObject(customer))
-                {
-                    if (customer.DefaultProject == null && customer.Projects.Count == 1)
-                    {
-                        customer.DefaultProject = this;
-                    }
-                }
-            });
-        }
+        [Association("Customer-Projects")]
+        public Customer Customer { get => customer; set => SetPropertyValue(ref customer, value); }
 
         private Activity? defaultActivity;
         [Persistent("DefaultActivity")]

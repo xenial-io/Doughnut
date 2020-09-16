@@ -58,6 +58,7 @@
 
     private async Task OnClose()
     {
+        Console.WriteLine("Close");
         Open = false;
 
         StateHasChanged();
@@ -66,6 +67,7 @@
 
     private async Task Save()
     {
+        Console.WriteLine("SAVEE");
         await OnSave.InvokeAsync();
         await OnClose();
     }
@@ -89,9 +91,12 @@
 
     protected void OnMediaQueryChanged(object sender, bool match)
     {
-        FullScreen = match;
+        if(FullScreen != match)
+        {
+            FullScreen = match;
 
-        StateHasChanged();
+            StateHasChanged();
+        }
     }
 
     protected override void Dispose()

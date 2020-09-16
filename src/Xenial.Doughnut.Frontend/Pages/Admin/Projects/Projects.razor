@@ -8,6 +8,10 @@
             Padding="@Padding.None">
             @context.CreateSortableColumn(nameof(CustomerProject.Name), "Name")
         </TableCell>
+        <TableCell
+            Padding="@Padding.None">
+            @context.CreateSortableColumn(nameof(CustomerProject.Customer), "Customer")
+        </TableCell>
     </TableHeaderCells>
     <TableRows >
         <TableCell
@@ -15,6 +19,12 @@
             Padding="@Padding.None"
             Scope="row">
             <a style="cursor: pointer; text-decoration: underline; font-weight: bold;" @onclick="(() => context.Item2.EditRow(context.Item1))">@context.Item1.Name</a>
+        </TableCell>
+        <TableCell
+            Component="th"
+            Padding="@Padding.None"
+            Scope="row">
+            <a style="cursor: pointer; text-decoration: underline; font-weight: bold;" @onclick="(() => context.Item2.EditRow(context.Item1))">@context.Item1.Customer?.Name</a>
         </TableCell>
     </TableRows>
     <AddDialog>

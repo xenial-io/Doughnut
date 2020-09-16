@@ -4,11 +4,14 @@
 <MatTextField @bind-Value="@Item.City" Label="City" FullWidth="@true"></MatTextField>
 
 <hr />
-<MatSelectItem @bind-Value="@Item.DefaultProject" Items="@Projects" Label="Default project" FullWidth="@true">
-    <ItemTemplate>
-        @context.Name
-    </ItemTemplate>
-</MatSelectItem>
+@if(Projects is not null)
+{
+    <MatSelectItem @bind-Value="@Item.DefaultProject" Items="@Projects" Label="Default project" FullWidth="@true">
+        <ItemTemplate>
+            @context.Name
+        </ItemTemplate>
+    </MatSelectItem>
+}
 
 @code { 
     [Parameter]
@@ -17,7 +20,7 @@
     [CascadingParameter]
     public UnitOfWork uow { get; set; }
     
-    private IReadOnlyList<CustomerProject> Projects { get; set; } = new CustomerProject[0];
+    private IReadOnlyList<CustomerProject> Projects { get; set; }
 
     protected override async Task OnParametersSetAsync()
     {

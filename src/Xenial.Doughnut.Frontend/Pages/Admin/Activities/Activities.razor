@@ -27,9 +27,9 @@
         </TableCell>
     </TableRows>
     <AddDialog>
-        <AddActivity Open="@context.ShowNew" OnClosed="@(async () => await context.Refresh())" />
+        <ActivityDetailDialog Title="New Activity" Open="@context.ShowNew" OnClosed="@(async () => await context.Refresh())" />
     </AddDialog>
     <EditDialog>
-        <EditActivity Open="@context.ShowEdit" Id="@(context.EditId ?? -1)" OnClosed="@(async () => await context.Refresh())" />
+        <ActivityDetailDialog Title="Edit Activity" Open="@context.ShowEdit" Id="@(context.EditId)" OnClosed="@(async () => await context.Refresh())" />
     </EditDialog>
 </ListView>

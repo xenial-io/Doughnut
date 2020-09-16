@@ -1,0 +1,45 @@
+﻿@inject UnitOfWork uow
+
+<DetailDialog Open="@Open" OnClosed="@(async () => await Close())" OnSave="@(async () => await Save())" Title="@Title">
+    <MatTextField @bind-Value="@Activity.Name" Label="Name" Required="true" FullWidth="@true"></MatTextField>
+    <MatTextField @bind-Value="@Activity.Price" Label="Price" Required="true" FullWidth="@true"></MatTextField>
+</DetailDialog>
+
+@code {
+    [Parameter]
+    public bool Open { get; set; }
+    [Parameter]
+    public string Title { get; set; } = "Add Activity";    
+    [Parameter]
+    public EventCallback OnClosed { get; set; } = EventCallback.Empty;
+    [Parameter]
+    public Nullable<int> Id { get; set; }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if(Id.HasValue)
+        {
+            Activity = await uow.GetObjectByKeyAsync<Activity>(Id.Value);
+        }
+        else
+        {
+            Activity = new Activity(uow);
+        }
+        await base.OnParametersSetAsync();
+    }
+    
+    private Activity Activity { get; set; }
+
+    public async Task Close()
+    {
+        Activity = null;
+        uow.DropIdentityMap();
+        Open = false;
+        await OnClosed.InvokeAsync();
+    }
+
+    private async Task Save()
+    {
+        await uow.CommitChangesAsync();
+    }
+}

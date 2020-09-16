@@ -78,7 +78,7 @@ else
                 aria-labelledby="tableTitle"
                 aria-label="enhanced table">
                 <TableHead>
-                    <TableRow>
+                    <Skclusive.Material.Table.TableRow>
                         <TableCell
                             Padding="@Padding.Checkbox">
                             <Checkbox
@@ -86,12 +86,12 @@ else
                                 InputProps="@(new Dictionary<string, object>{{ "aria-label", $"select all activities" }})" />
                         </TableCell>
                         @TableHeaderCells(this)
-                    </TableRow>
+                    </Skclusive.Material.Table.TableRow>
                 </TableHead>
                 <TableBody>
                     @foreach(var row in Rows)
                     {
-                        <TableRow Hover
+                        <Skclusive.Material.Table.TableRow Hover
                                   @key="row"
                                   OnClick="@((_) => row.Selected = !row.Selected)"
                                   TabIndex="-1"
@@ -103,7 +103,7 @@ else
                                 <Checkbox Checked="@row.Selected" />
                             </TableCell>
                             @TableRows((row.Item, this))
-                        </TableRow>
+                        </Skclusive.Material.Table.TableRow>
                     }
                 </TableBody>
             </Table>

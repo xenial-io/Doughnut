@@ -1,0 +1,9 @@
+﻿<MatTextField @bind-Value="@Item.Name" Label="Name" Required="true" FullWidth="@true"></MatTextField>
+<MatTextField @bind-Value="@Item.Street" Label="Street" FullWidth="@true"></MatTextField>
+<MatTextField @bind-Value="@Item.ZipCode" Label="ZipCode" FullWidth="@true"></MatTextField>
+<MatTextField @bind-Value="@Item.City" Label="City" FullWidth="@true"></MatTextField>
+
+@code { 
+    [Parameter]
+    public Customer Item { get; set; }
+}

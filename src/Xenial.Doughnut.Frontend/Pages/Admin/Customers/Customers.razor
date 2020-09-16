@@ -44,9 +44,13 @@
         </TableCell>
     </TableRows>
     <AddDialog>
-        <AddCustomer Open="@context.ShowNew" OnClosed="@(async () => await context.Refresh())" />
+        <ObjectDetailDialog TItem="Customer" Context="customer" Title="New Customer" Open="@context.ShowNew" OnClosed="@(async () => await context.Refresh())">
+            <CustomerDetail Item="@customer" />
+        </ObjectDetailDialog>
     </AddDialog>
     <EditDialog>
-        <EditCustomer Open="@context.ShowEdit" Id="@(context.EditId ?? -1)" OnClosed="@(async () => await context.Refresh())" />
+        <ObjectDetailDialog TItem="Customer" Context="customer" Title="Edit Customer" Open="@context.ShowEdit" Id="@context.EditId" OnClosed="@(async () => await context.Refresh())">
+            <CustomerDetail Item="@customer" />
+        </ObjectDetailDialog>
     </EditDialog>
 </ListView>

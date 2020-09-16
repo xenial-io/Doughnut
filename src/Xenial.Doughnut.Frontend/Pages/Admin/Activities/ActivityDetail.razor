@@ -1,0 +1,7 @@
+﻿<MatTextField @bind-Value="@Item.Name" Label="Name" Required="true" FullWidth="@true"></MatTextField>
+<MatTextField @bind-Value="@Item.Price" Label="Price" Required="true" FullWidth="@true"></MatTextField>
+
+@code { 
+    [Parameter]
+    public Activity Item { get; set; }
+}

@@ -27,9 +27,13 @@
         </TableCell>
     </TableRows>
     <AddDialog>
-        <ActivityDetailDialog Title="New Activity" Open="@context.ShowNew" OnClosed="@(async () => await context.Refresh())" />
+        <ObjectDetailDialog TItem="Activity" Context="activity" Title="New Activity" Open="@context.ShowNew" OnClosed="@(async () => await context.Refresh())">
+            <ActivityDetail Item="@activity" />
+        </ObjectDetailDialog>
     </AddDialog>
     <EditDialog>
-        <ActivityDetailDialog Title="Edit Activity" Open="@context.ShowEdit" Id="@(context.EditId)" OnClosed="@(async () => await context.Refresh())" />
+        <ObjectDetailDialog TItem="Activity" Context="activity" Title="Edit Activity" Open="@context.ShowEdit" Id="@(context.EditId)" OnClosed="@(async () => await context.Refresh())">
+            <ActivityDetail Item="@activity" />
+        </ObjectDetailDialog>
     </EditDialog>
 </ListView>

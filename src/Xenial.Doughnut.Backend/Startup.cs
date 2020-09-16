@@ -23,6 +23,8 @@ namespace Xenial.Doughnut.Server
 
         public void ConfigureServices(IServiceCollection services)
         {
+            DevExpress.Xpo.DB.SQLiteConnectionProvider.Register();
+
             services.AddControllers();
             services.AddXpoWebApi();
 

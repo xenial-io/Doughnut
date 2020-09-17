@@ -28,6 +28,8 @@ namespace Xenial.Doughnut.Frontend.Shared
 
         [Parameter]
         public string Title { get; set; }
+        [Parameter]
+        public string Name { get; set; }
 
         [Parameter]
         public RenderFragment Icon { get; set; }

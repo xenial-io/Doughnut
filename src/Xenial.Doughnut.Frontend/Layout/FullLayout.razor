@@ -2,6 +2,34 @@
 
 @inject NavigationManager Navigation
 
+<style>
+    #components-reconnect-modal {
+        z-index: 99999!important;
+        background-color: #999;
+        opacity: 0.5;
+        border-radius: 20px;
+    }
+    #components-reconnect-modal a {
+        font-size: 2rem;
+        display: inline-block;
+        background-color: -webkit-link;
+        border: 1px solid -webkit-link;
+        padding: .5rem;
+        border-radius: 5px;
+        color: #fff;
+    }
+    main h4:first-of-type {
+        margin-top: 0.5rem;
+        margin-left: 2.25rem;
+    }
+    main div.Paper-Root {
+        margin-left: 2.25rem;
+        margin-right: 2.25rem;
+        padding: 1rem;
+        text-align: center;
+    }
+</style>
+
 <MainLayout>
     <LogoContent>
         <AppLogo />
@@ -55,15 +83,6 @@
     <BodyContent>
         @Body
     </BodyContent>
-    <FooterContent>
-        <Footer
-            DomainName="Skclusive Io"
-            DomainUrl="https://skclusive.io/"
-            Copyright="2020">
-            Created with love for the environment. By designers and developers who
-            love to work together in offices!
-        </Footer>
-    </FooterContent>
 </MainLayout>
 
 @code

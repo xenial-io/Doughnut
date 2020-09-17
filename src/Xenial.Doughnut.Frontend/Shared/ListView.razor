@@ -1,13 +1,5 @@
 @typeparam TItem
 
-<style>
-    .custom-theme {
-        display: inline;
-        --theme-palette-primary-main: #4caf50;
-        --theme-palette-primary-current: #388e3c;
-    }
-</style>
-
 <Typography
     Variant="@TypographyVariant.H4">
     @Icon @Title
@@ -57,14 +49,17 @@ else
             </Typography>
             <Typography Variant="@TypographyVariant.Body1"
                         GutterBottom>
-                <div class="custom-theme">
-                    <Button Variant="@ButtonVariant.Contained"
-                            OnClick="New"
-                            Color="@Color.Primary"
-                            Style="margin: 8px;">
-                        New
-                    </Button>
-                </div>
+                <Button Variant="@ButtonVariant.Contained"
+                        OnClick="New"
+                        Color="@Color.Primary"
+                        Style="margin: 8px;">
+                    <StartIcon>
+                        @Icon
+                    </StartIcon>
+                    <ChildContent>
+                        New @Name
+                    </ChildContent>
+                </Button>
             </Typography>
         </Paper>
     }

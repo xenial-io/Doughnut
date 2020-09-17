@@ -1,0 +1,71 @@
+@inject NavigationManager Navigation
+
+<ThemeProvider
+    Theme="@Theme" />
+@* <MarkdownStyles
+    Theme="@Theme" />
+<MarkdownPrismStyles
+    Theme="@Theme"/> *@
+
+<IconButton
+    Color="@Color.Inherit"
+    OnClick="@OnThemeChange"
+    aria-label="Toggle light/dark theme"
+    title="Toggle light/dark theme">
+    @if (IsLight)
+    {
+        <Brightness4Icon />
+    } else
+    {
+        <Brightness7Icon />
+    }
+</IconButton>
+<Hidden MediumDown
+        Context="HiddenContext">
+    <div
+        Class="@HiddenContext.Class">
+        <IconButton Color="@Color.Inherit"
+                    OnClick="@HandleNotificationsClick">
+            <Badge Badge="@Notifications"
+                   Color="@Color.Primary"
+                   Variant="@BadgeVariant.Dot">
+                <NotificationsOutlinedIcon />
+            </Badge>
+        </IconButton>
+        <IconButton Class="FullLayout-Signout"
+                    Color="@Color.Inherit"
+                    OnClick="@HandleSignoutClick">
+            <InputIcon />
+        </IconButton>
+    </div>
+</Hidden>
+@code
+{
+    private Theme Theme { set; get; } = Theme.Light;
+
+    protected bool IsLight => Theme == Theme.Light;
+
+    private void OnThemeChange()
+    {
+        Theme = IsLight ? Theme.Dark : Theme.Light;
+    }
+
+    private string Notifications { set; get; } = "10";
+
+    private void HandleNotificationsClick()
+    {
+        // OnNotificationsClick?.Invoke();
+    }
+
+    private void HandleSignoutClick()
+    {
+        if (OperatingSystem.IsBrowser())
+        {
+            Navigation.NavigateTo("LogoutWasm");
+        }
+        else
+        {
+            Navigation.NavigateTo("Logout", true);
+        }
+    }
+}

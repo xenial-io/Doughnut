@@ -1,7 +1,5 @@
 ﻿@inherits LayoutComponentBase
 
-@inject NavigationManager Navigation
-
 <style>
     #components-reconnect-modal {
         z-index: 99999!important;
@@ -19,8 +17,9 @@
         color: #fff;
     }
     main h4:first-of-type {
-        margin-top: 0.5rem;
+        margin-top: 1rem;
         margin-left: 2.25rem;
+        display: flow-root;
     }
     main div.Paper-Root {
         margin-left: 2.25rem;
@@ -43,29 +42,7 @@
         </Typography>
     </TitleContent>
     <ActionsContent>
-        <Hidden
-            MediumDown
-            Context="HiddenContext">
-            <div
-                Class="@HiddenContext.Class">
-                <IconButton
-                    Color="@Color.Inherit"
-                    OnClick="@HandleNotificationsClick">
-                    <Badge
-                        Badge="@Notifications"
-                        Color="@Color.Primary"
-                        Variant="@BadgeVariant.Dot">
-                        <NotificationsOutlinedIcon />
-                    </Badge>
-                </IconButton>
-                <IconButton
-                    Class="FullLayout-Signout"
-                    Color="@Color.Inherit"
-                    OnClick="@HandleSignoutClick">
-                    <InputIcon />
-                </IconButton>
-            </div>
-        </Hidden>
+        <AppActions />
     </ActionsContent>
     <SidebarContent>
         <Profile
@@ -174,23 +151,4 @@
             Prefix =  true
         },
     };
-
-    private string Notifications { set; get; } = "10";
-
-    private void HandleNotificationsClick()
-    {
-        // OnNotificationsClick?.Invoke();
-    }
-
-    private void HandleSignoutClick()
-    {
-        if (OperatingSystem.IsBrowser())
-        {
-            Navigation.NavigateTo("LogoutWasm");
-        }
-        else
-        {
-            Navigation.NavigateTo("Logout", true);
-        }
-    }
 }

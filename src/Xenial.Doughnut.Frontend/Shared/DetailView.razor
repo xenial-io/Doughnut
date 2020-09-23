@@ -1,0 +1,54 @@
+@typeparam TItem
+
+<Typography
+    Variant="@TypographyVariant.H4">
+    @Icon @Title
+</Typography>
+
+<Toolbar Disabled="@IsLoading">
+    @if(ShowNew)
+    {
+        <IconButton
+            Disabled="@IsLoading"
+            OnClick="New"
+            aria-label="new">
+            <AddCircleIcon />
+        </IconButton>
+    }
+    @if(ShowDelete)
+    {
+        <IconButton
+            Disabled="@IsLoading"
+            aria-label="delete"
+            OnClick="@Delete">
+            <DeleteIcon />
+        </IconButton>
+    }
+    <IconButton
+        Disabled="@IsLoading"
+        OnClick="@Save"
+        aria-label="save">
+        <SaveIcon />
+    </IconButton>
+    <IconButton
+        Disabled="@IsLoading"
+        OnClick="@Refresh"
+        aria-label="refresh">
+        <RefreshIcon />
+    </IconButton>
+</Toolbar>
+@if(IsLoading)
+{
+    <CircularProgress
+            Variant="@CircularProgressVariant.Indeterminate"
+            DisableShrink
+            Size="64"
+            Thickness="4" />
+}
+else
+{
+    @if(CurrentObject != null)
+    {
+        @ChildContent(CurrentObject)
+    }
+}

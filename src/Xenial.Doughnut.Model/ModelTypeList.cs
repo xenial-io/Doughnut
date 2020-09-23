@@ -8,6 +8,10 @@ namespace Xenial.Doughnut.Model
         {
             typeof(DoughnutBaseObject),
 
+            typeof(Country),
+            
+            typeof(Settings),
+
             typeof(Activity),
 
             typeof(TimeRecord),

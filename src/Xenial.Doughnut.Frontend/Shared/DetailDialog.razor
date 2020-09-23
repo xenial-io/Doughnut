@@ -58,7 +58,6 @@
 
     private async Task OnClose()
     {
-        Console.WriteLine("Close");
         Open = false;
 
         StateHasChanged();
@@ -67,7 +66,6 @@
 
     private async Task Save()
     {
-        Console.WriteLine("SAVEE");
         await OnSave.InvokeAsync();
         await OnClose();
     }

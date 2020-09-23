@@ -17,4 +17,7 @@ namespace Xenial.Doughnut.Model
         [Persistent("Price")]
         public decimal Price { get => price; set => SetPropertyValue(ref price, value); }
     }
+
+
+    
 }

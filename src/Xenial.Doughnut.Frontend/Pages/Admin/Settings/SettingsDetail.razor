@@ -1,0 +1,18 @@
+﻿<MatTextField @bind-Value="@Item.CompanyName" Label="CompanyName" FullWidth="true"></MatTextField>
+<MatTextField @bind-Value="@Item.OwnerName" Label="Owner" FullWidth="true"></MatTextField>
+<MatTextField @bind-Value="@Item.CompanyEmail" Label="Email" FullWidth="true"></MatTextField>
+<MatTextField @bind-Value="@Item.CompanyWebsite" Label="Website" FullWidth="true"></MatTextField>
+<MatTextField @bind-Value="@Item.CompanyPhone" Label="Phone" FullWidth="true"></MatTextField>
+<MatTextField @bind-Value="@Item.CompanyTaxNumber" Label="TaxNumber" FullWidth="true"></MatTextField>
+<MatTextField @bind-Value="@Item.CompanyVatNumber" Label="VatNumber" FullWidth="true"></MatTextField>
+<MatTextField @bind-Value="@Item.CompanyStreet" Label="Street" FullWidth="true"></MatTextField>
+<MatTextField @bind-Value="@Item.CompanyPostalCode" Label="PostalCode" FullWidth="true"></MatTextField>
+<MatTextField @bind-Value="@Item.CompanyCity" Label="City" FullWidth="true"></MatTextField>
+@* <MatTextField @bind-Value="@Item.CompanyCountry" Label="Country" FullWidth="true"></MatTextField>
+<MatTextField @bind-Value="@Item.CompanyLogo" Label="Logo" FullWidth="true"></MatTextField> *@
+    
+
+@code { 
+    [Parameter]
+    public Settings Item { get; set; }
+}

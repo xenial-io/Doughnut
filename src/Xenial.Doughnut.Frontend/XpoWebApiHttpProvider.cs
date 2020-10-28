@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Net.Http;
 
-using BIT.Data.Functions;
+using BIT.Data.DataTransfer;
 using BIT.Data.Services;
 
 using DevExpress.Xpo.DB;
@@ -14,8 +14,8 @@ namespace Xenial.Doughnut.Frontend
     {
         public const string TokenPart = "Token";
         public const string DataStoreIdPart = "DataStoreId";
-        private const string UrlPart = "Url";
-        private const string ControllerPart = "Controller";
+        private const string urlPart = "Url";
+        private const string controllerPart = "Controller";
         public XpoWebApiHttpProvider(
             IFunction functionClient,
             IObjectSerializationService objectSerializationService,
@@ -23,11 +23,11 @@ namespace Xenial.Doughnut.Frontend
         ) : base(functionClient, objectSerializationService, autoCreateOption) { }
 
         public static string GetConnectionString(
-            string Url,
-            string Controller,
-            string Token,
-            string DataStoreId
-        ) => $"{DataStoreBase.XpoProviderTypeParameterName}={XpoProviderTypeString};{UrlPart}={Url};{ControllerPart}={Controller};{TokenPart}={Token};{DataStoreIdPart}={DataStoreId}";
+            string url,
+            string controller,
+            string token,
+            string dataStoreId
+        ) => $"{DataStoreBase.XpoProviderTypeParameterName}={XpoProviderTypeString};{urlPart}={url};{controllerPart}={controller};{TokenPart}={token};{DataStoreIdPart}={dataStoreId}";
 
         public const string XpoProviderTypeString = nameof(XpoWebApiHttpProvider);
 
@@ -35,8 +35,8 @@ namespace Xenial.Doughnut.Frontend
         {
             objectsToDisposeOnDisconnect = null;
             var Parser = new ConnectionStringParser(connectionString);
-            var Url = Parser.GetPartByName(UrlPart);
-            var Controller = Parser.GetPartByName(ControllerPart);
+            var Url = Parser.GetPartByName(urlPart);
+            var Controller = Parser.GetPartByName(controllerPart);
             var DataStoreId = Parser.GetPartByName(DataStoreIdPart);
 
             var Headers = new Dictionary<string, string>
@@ -48,7 +48,7 @@ namespace Xenial.Doughnut.Frontend
 
             var restClientNetFunctionClient = new HttpClientFunction(client, url, Headers);
 
-            return new XpoWebApiHttpProvider(restClientNetFunctionClient, new CompressXmlObjectSerializationService(), autoCreateOption);
+            return new XpoWebApiHttpProvider(restClientNetFunctionClient, new SimpleObjectSerializationService(), autoCreateOption);
         }
 
     }

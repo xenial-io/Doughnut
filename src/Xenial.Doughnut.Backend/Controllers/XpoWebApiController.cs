@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-using BIT.Data.Functions;
+using BIT.Data.DataTransfer;
 using BIT.Xpo.Providers.WebApi.AspNetCore;
 
 using Microsoft.AspNetCore.Authorization;
@@ -13,7 +13,7 @@ namespace Xenial.Doughnut.Server.Controllers
     [Authorize]
     public class XpoWebApiController : XpoWebApiControllerBase
     {
-        public XpoWebApiController(IFunction DataStoreFunctionServer) : base(DataStoreFunctionServer)
+        public XpoWebApiController(IFunction dataStoreFunctionServer) : base(dataStoreFunctionServer)
         {
         }
 

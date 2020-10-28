@@ -12,7 +12,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="BIT.Xpo.Providers.WebApi.Client" Version="20.1.6.583700904" />
+    <PackageReference Include="BIT.Xpo.Providers.WebApi.Client" Version="20.1.6.*" />
     <PackageReference Include="Bogus" Version="31.0.2" />
     <PackageReference Include="Microsoft.Extensions.Http" Version="5.0.0-rc.1.20451.14" />
     <PackageReference Include="Skclusive.Material.Component" Version="2.0.0" />

@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-using BIT.Data.Functions;
+using BIT.Data.DataTransfer;
 using BIT.Data.Services;
 using BIT.Xpo.Models;
 

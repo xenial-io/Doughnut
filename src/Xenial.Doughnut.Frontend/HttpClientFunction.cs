@@ -4,7 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
 
-using BIT.Data.Functions;
+using BIT.Data.DataTransfer;
 
 namespace Xenial.Doughnut.Frontend
 {
@@ -33,11 +33,11 @@ namespace Xenial.Doughnut.Frontend
         /// <summary>
         /// Executes the funtion asynchronous with the specified parameters
         /// </summary>
-        /// <param name="Parameters">An implementation of IDataParameters</param>
+        /// <param name="parameters">An implementation of IDataParameters</param>
         /// <returns>A task with the result of the function</returns>
-        public async Task<IDataResult> ExecuteFunctionAsync(IDataParameters Parameters)
+        public async Task<IDataResult> ExecuteFunctionAsync(IDataParameters parameters)
         {
-            var result = await Client.PostAsJsonAsync(Url, Parameters);
+            var result = await Client.PostAsJsonAsync(Url, parameters);
             result.EnsureSuccessStatusCode();
             var body = await result.Content.ReadFromJsonAsync<DataResult>();
             return body;
@@ -46,9 +46,9 @@ namespace Xenial.Doughnut.Frontend
         /// <summary>
         /// Executes the funtion synchronous with the specified parameters
         /// </summary>
-        /// <param name="Parameters">An implementation of IDataParameters</param>
+        /// <param name="parameters">An implementation of IDataParameters</param>
         /// <returns>The result of the function</returns>
-        public IDataResult ExecuteFunction(IDataParameters Parameters)
+        public IDataResult ExecuteFunction(IDataParameters parameters)
             => throw new PlatformNotSupportedException();
     }
 }
